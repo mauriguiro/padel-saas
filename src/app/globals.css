@@ -1,27 +1,130 @@
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+@layer base {
+  .theme {
+    --font-heading: var(--font-sans);
+    --font-sans: var(--font-sans);
+  }
+  :root {
+    /* Fondo principal ligerísimamente gris/azulado para destacar tarjetas */
+    --background: hsl(210, 40%, 98%); 
+    /* Texto casi negro azulado (nitidez) */
+    --foreground: hsl(222, 47%, 11%); 
+    
+    /* Tarjetas blanco puro, esto crea el efecto resaltado */
+    --card: hsl(0, 0%, 100%); 
+    --card-foreground: hsl(222, 47%, 11%);
+    
+    --popover: hsl(0, 0%, 100%);
+    --popover-foreground: hsl(222, 47%, 11%);
+    
+    /* Azul brillante vibrante para acciones principales */
+    --primary: hsl(221, 83%, 53%);
+    --primary-foreground: hsl(210, 40%, 98%);
+    
+    /* Secondary/Muted: Gris azulado claro para destacar sutilmente */
+    --secondary: hsl(214, 32%, 91%);
+    --secondary-foreground: hsl(222, 47%, 11%);
+    
+    --muted: hsl(214, 32%, 91%);
+    --muted-foreground: hsl(215, 25%, 35%); /* Texto secundario oscuro para legibilidad perfecta */
+    
+    --accent: hsl(210, 40%, 94%);
+    --accent-foreground: hsl(222, 47%, 11%);
+    
+    --destructive: hsl(348, 83%, 47%);
+    --destructive-foreground: hsl(210, 40%, 98%);
+    
+    /* Bordes bien marcados pero suaves */
+    --border: hsl(214, 32%, 80%);
+    --input: hsl(214, 32%, 80%);
+    --ring: hsl(221, 83%, 53%); /* Anillo de enfoque azul vibrante */
+    
+    /* Charts */
+    --chart-1: hsl(221, 83%, 53%);
+    --chart-2: hsl(160, 60%, 45%);
+    --chart-3: hsl(30, 80%, 55%);
+    --chart-4: hsl(280, 65%, 60%);
+    --chart-5: hsl(340, 75%, 55%);
+    
+    /* Bordes más redondeados para "alegría" y modernidad */
+    --radius: 0.85rem; 
+    
+    --sidebar: hsl(0, 0%, 100%);
+    --sidebar-foreground: hsl(222, 47%, 11%);
+    --sidebar-primary: hsl(221, 83%, 53%);
+    --sidebar-primary-foreground: hsl(0, 0%, 100%);
+    --sidebar-accent: hsl(214, 32%, 91%);
+    --sidebar-accent-foreground: hsl(222, 47%, 11%);
+    --sidebar-border: hsl(214, 32%, 85%);
+    --sidebar-ring: hsl(221, 83%, 53%);
+  }
+  
+  .dark {
+    /* Fondo muy oscuro y elegante (Slate 950) */
+    --background: hsl(222, 47%, 6%);
+    --foreground: hsl(210, 40%, 98%);
+    
+    /* Tarjetas sutilmente despegadas del fondo */
+    --card: hsl(222, 47%, 9%); 
+    --card-foreground: hsl(210, 40%, 98%);
+    
+    --popover: hsl(222, 47%, 9%);
+    --popover-foreground: hsl(210, 40%, 98%);
+    
+    /* Primary en modo oscuro: Celeste/Azul vibrante que resalta */
+    --primary: hsl(217, 91%, 60%);
+    --primary-foreground: hsl(222, 47%, 11%);
+    
+    --secondary: hsl(217, 32%, 17%);
+    --secondary-foreground: hsl(210, 40%, 98%);
+    
+    --muted: hsl(217, 32%, 17%);
+    --muted-foreground: hsl(215, 20%, 65%);
+    
+    --accent: hsl(217, 32%, 17%);
+    --accent-foreground: hsl(210, 40%, 98%);
+    
+    --destructive: hsl(348, 83%, 55%);
+    --destructive-foreground: hsl(210, 40%, 98%);
+    
+    --border: hsl(217, 32%, 22%);
+    --input: hsl(217, 32%, 22%);
+    --ring: hsl(217, 91%, 60%);
+    
+    --chart-1: hsl(217, 91%, 60%);
+    --chart-2: hsl(160, 60%, 45%);
+    --chart-3: hsl(30, 80%, 55%);
+    --chart-4: hsl(280, 65%, 60%);
+    --chart-5: hsl(340, 75%, 55%);
+    
+    --sidebar: hsl(222, 47%, 6%);
+    --sidebar-foreground: hsl(210, 40%, 98%);
+    --sidebar-primary: hsl(217, 91%, 60%);
+    --sidebar-primary-foreground: hsl(0, 0%, 100%);
+    --sidebar-accent: hsl(217, 32%, 17%);
+    --sidebar-accent-foreground: hsl(210, 40%, 98%);
+    --sidebar-border: hsl(217, 32%, 22%);
+    --sidebar-ring: hsl(217, 91%, 60%);
+  }
+  
+  * {
+    @apply border-border outline-ring;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
   }
 }

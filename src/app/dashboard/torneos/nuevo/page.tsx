@@ -1,0 +1,238 @@
+import { createClient } from '@/utils/supabase/server'
+import { redirect } from 'next/navigation'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import Link from 'next/link'
+import { ArrowLeft, Trophy, Calendar, Settings2, Users, Info } from 'lucide-react'
+import { Switch } from '@/components/ui/switch'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { ZonalSearch } from '@/components/zonal-search'
+import { PriceInput } from '@/components/price-input'
+
+export default function NuevoTorneoPage() {
+  const crearTorneo = async (formData: FormData) => {
+    'use server'
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return redirect('/login')
+
+    const name = (formData.get('name') as string)?.toUpperCase() || ''
+    const startDate = formData.get('start_date') as string
+    const category = (formData.get('category') as string)?.toUpperCase() || ''
+    const gender = formData.get('gender') as string || 'Masculino'
+    const price = parseInt(formData.get('price') as string) || 0
+    const registrationType = formData.get('registration_type') as string
+    const tournamentFormat = formData.get('tournament_format') as string
+    const scoringFormat = formData.get('scoring_format') as string
+    const hasSeededTeams = formData.get('has_seeded_teams') === 'on'
+
+    const isZonal = formData.get('is_zonal') === 'true'
+    const coHostId = formData.get('co_host_id') as string | null
+
+    const { error } = await supabase.from('tournaments').insert({
+      club_id: user.id,
+      name,
+      start_date: startDate,
+      category,
+      gender,
+      price_per_player: price,
+      registration_type: registrationType,
+      tournament_format: tournamentFormat,
+      scoring_format: scoringFormat,
+      has_seeded_teams: hasSeededTeams,
+      status: 'OPEN',
+      is_zonal: isZonal,
+      co_host_id: isZonal ? coHostId : null,
+      zonal_status: isZonal && coHostId ? 'PENDING' : 'NONE'
+    })
+
+    if (error) {
+      console.error(error)
+      return redirect('/dashboard/torneos/nuevo?error=true')
+    }
+
+    redirect('/dashboard')
+  }
+
+  return (
+    <div className="w-full max-w-4xl mx-auto flex flex-col gap-8 pb-10">
+      <div className="flex items-center gap-4">
+        <Link href="/dashboard" className="p-3 hover:bg-accent rounded-full transition-colors border shadow-sm bg-background">
+          <ArrowLeft className="h-5 w-5 text-muted-foreground" />
+        </Link>
+        <div>
+          <h1 className="font-bold text-3xl text-foreground">Organizar Nuevo Torneo</h1>
+          <p className="text-muted-foreground mt-1">Configura los parámetros para abrir las inscripciones.</p>
+        </div>
+      </div>
+
+      <form action={crearTorneo} className="flex flex-col gap-5">
+        
+        {/* Tarjeta 1: Datos Principales */}
+        <Card className="shadow-sm">
+          <CardHeader className="pb-3 border-b">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Calendar className="h-5 w-5 text-primary" />
+              Datos Principales
+            </CardTitle>
+            <CardDescription>Información pública que verán los jugadores.</CardDescription>
+          </CardHeader>
+          <CardContent className="p-5 grid gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="name" className="text-sm font-semibold text-muted-foreground">Nombre del Torneo</Label>
+                <Input name="name" required placeholder="Ej: Copa de Verano Padel Club" className="h-10 uppercase" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="start_date" className="text-sm font-semibold text-muted-foreground">Fecha de Inicio</Label>
+                <Input name="start_date" type="date" required className="h-10" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="category" className="text-sm font-semibold text-muted-foreground">Categorías incluidas</Label>
+                <Input 
+                  id="category" 
+                  name="category" 
+                  list="categorias-torneo" 
+                  placeholder="Ej. 5ta Caballeros" 
+                  required 
+                  className="h-10 uppercase"
+                />
+                <datalist id="categorias-torneo">
+                  <option value="Principiantes" />
+                  <option value="8va" />
+                  <option value="7ma" />
+                  <option value="6ta" />
+                  <option value="5ta" />
+                  <option value="4ta" />
+                  <option value="3ra" />
+                  <option value="2da" />
+                  <option value="1ra" />
+                  <option value="Suma 13" />
+                  <option value="Suma 11" />
+                  <option value="Suma 9" />
+                  <option value="Libre" />
+                </datalist>
+                <p className="text-[11px] text-muted-foreground mt-0.5">Escribe libremente o elige una de la lista.</p>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="gender" className="text-sm font-semibold text-muted-foreground">Rama / Género</Label>
+                <Select name="gender" defaultValue="Masculino">
+                  <SelectTrigger className="h-10"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Masculino">Masculino (Caballeros)</SelectItem>
+                    <SelectItem value="Femenino">Femenino (Damas)</SelectItem>
+                    <SelectItem value="Mixto">Mixto</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="price" className="text-sm font-semibold text-muted-foreground">Precio Inscripción (Por Pareja)</Label>
+                <PriceInput />
+                <p className="text-xs text-muted-foreground">
+                  El sistema calculará automáticamente que cada jugador debe pagar la mitad.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Tarjeta 2: Reglas del Motor */}
+        <Card className="shadow-sm">
+          <CardHeader className="pb-3 border-b">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Settings2 className="h-5 w-5 text-primary" />
+              Formato y Reglas
+            </CardTitle>
+            <CardDescription>Estos ajustes definirán cómo el sistema sortea el cuadro matemáticamente.</CardDescription>
+          </CardHeader>
+          <CardContent className="p-5 grid gap-5">
+            
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="registration_type" className="text-sm font-semibold text-foreground flex items-center gap-2">
+                <Users className="h-4 w-4" /> Forma de Inscripción
+              </Label>
+              <Select name="registration_type" defaultValue="POR_PAREJAS">
+                <SelectTrigger className="h-10"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="POR_PAREJAS">Por Pareja (Las parejas se anotan juntas)</SelectItem>
+                  <SelectItem value="INDIVIDUAL">Individual (El sistema sortea las parejas al azar)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="tournament_format" className="text-sm font-semibold text-foreground">Formato del Torneo</Label>
+              <Select name="tournament_format" defaultValue="ZONAS_Y_PLAYOFFS">
+                <SelectTrigger className="h-10"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ZONAS_Y_PLAYOFFS">Zonas (Grupos) + Cuadro de Eliminación</SelectItem>
+                  <SelectItem value="ELIMINACION_SIMPLE">Eliminación Simple (Pierde y sale directo)</SelectItem>
+                  <SelectItem value="DOBLE_ELIMINACION">Doble Eliminación (Con Ronda de Perdedores)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="scoring_format" className="text-sm font-semibold text-foreground">Formato de Partido</Label>
+              <Select name="scoring_format" defaultValue="TRES_SETS">
+                <SelectTrigger className="h-10"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="2_SETS_Y_SUPER_TIEBREAK">Al mejor de 2 Sets + Súper Tie Break a 10</SelectItem>
+                  <SelectItem value="3_SETS">Al mejor de 3 Sets Completos</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex flex-col gap-3 p-4 border rounded-md bg-muted/20">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="has_seeded_teams" className="text-sm font-semibold text-foreground cursor-pointer">Incluir Cabezas de Serie</Label>
+                  <Dialog>
+                    <DialogTrigger className="text-muted-foreground hover:text-primary transition-colors" type="button">
+                      <Info className="h-4 w-4" />
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>¿Qué son los Cabezas de Serie?</DialogTitle>
+                        <DialogDescription className="pt-3 text-sm leading-relaxed">
+                          El objetivo de los cabezas de serie es distribuir a las parejas más fuertes en diferentes zonas para que no se crucen prematuramente en la fase de grupos. 
+                          <br/><br/>
+                          Al activar esta opción, una vez creado el torneo y recibidas las inscripciones, podrás elegir cuáles son estas parejas desde el panel de control del torneo, simplemente marcándolas con una corona.
+                        </DialogDescription>
+                      </DialogHeader>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+                <Switch id="has_seeded_teams" name="has_seeded_teams" value="on" />
+              </div>
+            </div>
+
+          </CardContent>
+        </Card>
+
+        {/* Buscador Zonal */}
+        <ZonalSearch />
+
+        {/* Botones de acción */}
+        <div className="flex justify-end gap-4 mt-2">
+          <Link href="/dashboard" className="px-6 py-3 border border-input rounded-md hover:bg-accent font-medium transition-colors">
+            Cancelar
+          </Link>
+          <button type="submit" className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-3 rounded-md font-bold shadow-md transition-all hover:-translate-y-0.5">
+            Crear y Abrir Inscripciones
+          </button>
+        </div>
+
+      </form>
+    </div>
+  )
+}

@@ -51,7 +51,6 @@ export function CanchasForm({ canchas }: { canchas: any[] }) {
 
       {/* Lista de Canchas */}
       <div className="bg-card border rounded-xl p-6 shadow-sm">
-        <h2 className="text-xl font-bold mb-4 text-center">Mis Canchas Registradas ({canchas.length})</h2>
         {canchas.length === 0 ? (
           <p className="text-muted-foreground text-sm text-center py-8">No tienes canchas registradas. Añade una para empezar a usar el Planificador.</p>
         ) : (

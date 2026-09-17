@@ -60,11 +60,10 @@ export default async function TorneosPage() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="font-bold text-3xl">Mis Torneos</h1>
-          <p className="text-muted-foreground mt-1">Gestiona los torneos, inscripciones y fixtures.</p>
         </div>
         <Link 
           href="/dashboard/torneos/nuevo" 
-          className="flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md font-medium shadow-sm transition-all hover:-translate-y-0.5"
+          className="flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-md font-medium shadow-sm transition-all hover:-translate-y-0.5"
         >
           <PlusCircle className="h-5 w-5" />
           Nuevo Torneo

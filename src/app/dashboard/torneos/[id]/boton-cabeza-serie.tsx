@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Star } from 'lucide-react'
+import { Crown } from 'lucide-react'
 import { toggleSeeded } from './actions'
 
 export function BotonCabezaSerie({ 
@@ -25,14 +25,15 @@ export function BotonCabezaSerie({
     <button
       onClick={handleToggle}
       disabled={loading}
-      className={`p-1.5 rounded-md flex items-center justify-center transition-colors border ${
+      className={`px-2 py-1 rounded-md flex items-center justify-center gap-1.5 transition-colors border text-xs font-bold ${
         isSeeded 
-          ? 'bg-yellow-100 border-yellow-300 text-yellow-600 hover:bg-yellow-200 dark:bg-yellow-900/30 dark:border-yellow-700 dark:text-yellow-500' 
+          ? 'bg-yellow-100 border-yellow-300 text-yellow-700 hover:bg-yellow-200 dark:bg-yellow-900/30 dark:border-yellow-700 dark:text-yellow-500 shadow-sm' 
           : 'bg-muted/50 border-transparent text-muted-foreground hover:bg-muted/80'
       }`}
       title={isSeeded ? "Quitar Cabeza de Serie" : "Marcar como Cabeza de Serie"}
     >
-      <Star className={`h-4 w-4 ${isSeeded ? 'fill-current' : ''}`} />
+      <Crown className={`h-3.5 w-3.5 ${isSeeded ? 'fill-current' : ''}`} />
+      {isSeeded && <span>Cabeza de Serie</span>}
     </button>
   )
 }

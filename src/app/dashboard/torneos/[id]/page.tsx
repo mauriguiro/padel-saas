@@ -188,10 +188,10 @@ export default async function TorneoDetallePage({ params }: { params: { id: stri
           <Card className="shadow-sm">
             <CardContent className="p-0">
               {inscriptos && inscriptos.length > 0 ? (
-                <ul className="divide-y">
+                <ul className="flex flex-col gap-4 p-4">
                   {inscriptos.map((equipo, index) => (
-                    <li key={equipo.id} className="p-4 hover:bg-muted/10 transition-colors flex flex-col gap-3">
-                      <div className="font-bold text-sm text-foreground flex items-center justify-between border-b pb-1 mb-1">
+                    <li key={equipo.id} className={`p-4 rounded-lg border shadow-sm transition-colors flex flex-col gap-3 ${equipo.time_availability ? 'border-l-4 border-l-yellow-400 bg-yellow-50/50 dark:bg-yellow-900/10' : 'bg-card'}`}>
+                      <div className="font-bold text-sm text-foreground flex items-center justify-between border-b pb-2 mb-1">
                         <div className="flex items-center gap-2">
                           <span>Pareja {index + 1}</span>
                           <BotonEditarPareja 

@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { MessageCircle, Users } from 'lucide-react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 
@@ -135,23 +136,61 @@ export function BotonWhatsAppPromo({
   torneoName: string, 
   jugadores: any[] 
 }) {
+  const [selectedPhones, setSelectedPhones] = useState<string[]>([])
+  const [sendingIndex, setSendingIndex] = useState<number>(-1)
+  
   const mensaje = `🔥 ¡Se abrieron las inscripciones para el torneo *${torneoName}*!\n\nNo te quedes sin tu cupo. Inscríbete en el club o respondiendo este mensaje. 🎾🏆`
+  
+  const validJugadores = jugadores?.filter(p => p.phone) || []
   
   const handleSendGeneric = () => {
     window.open(`https://wa.me/?text=${encodeURIComponent(mensaje)}`, '_blank')
   }
 
-  const handleSendPlayer = (phone: string) => {
+  const toggleSelect = (phone: string) => {
+    setSelectedPhones(prev => 
+      prev.includes(phone) ? prev.filter(p => p !== phone) : [...prev, phone]
+    )
+  }
+
+  const selectAll = () => {
+    if (selectedPhones.length === validJugadores.length) {
+      setSelectedPhones([])
+    } else {
+      setSelectedPhones(validJugadores.map(p => p.phone))
+    }
+  }
+
+  const startSending = () => {
+    if (selectedPhones.length === 0) return
+    setSendingIndex(0)
+    sendTo(selectedPhones[0])
+  }
+  
+  const sendNext = () => {
+    const nextIdx = sendingIndex + 1
+    if (nextIdx < selectedPhones.length) {
+      setSendingIndex(nextIdx)
+      sendTo(selectedPhones[nextIdx])
+    } else {
+      setSendingIndex(-1) // Terminado
+      setSelectedPhones([]) // Limpiar
+    }
+  }
+
+  const sendTo = (phone: string) => {
     const cleanPhone = phone.replace(/\D/g, '')
     window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(mensaje)}`, '_blank')
   }
 
   return (
-    <Dialog>
-      <DialogTrigger 
-        type="button"
-        className="flex items-center gap-2 bg-green-600 text-black hover:bg-green-700 px-4 py-2 rounded-md font-bold shadow-md transition-transform hover:-translate-y-0.5"
-      >
+    <Dialog onOpenChange={(open) => {
+      if (!open) {
+        setSendingIndex(-1)
+        setSelectedPhones([])
+      }
+    }}>
+      <DialogTrigger className="flex items-center gap-2 bg-green-600 text-black hover:bg-green-700 px-4 py-2 rounded-md font-bold shadow-md transition-transform hover:-translate-y-0.5 outline-none">
         <MessageCircle className="h-4 w-4" />
         Promocionar
       </DialogTrigger>
@@ -173,38 +212,102 @@ export function BotonWhatsAppPromo({
               <Users className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <p className="font-bold text-base">Elegir Contacto o Grupo</p>
-              <p className="text-xs text-muted-foreground mt-0.5">Abre WhatsApp para seleccionar a quién enviar</p>
+              <p className="font-bold text-base">Reenviar a Contactos/Grupos</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Abre WhatsApp vacío para que elijas a quién reenviar</p>
             </div>
           </button>
           
-          <div className="flex flex-col">
-            <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">Jugadores del Club</div>
-            <div className="flex flex-col gap-1.5 max-h-[300px] overflow-y-auto pr-1">
+          <div className="flex flex-col border rounded-lg overflow-hidden shadow-sm">
+            <div className="flex items-center justify-between bg-muted/50 p-2 border-b">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold uppercase tracking-wider">Jugadores del Club</span>
+                <span className="bg-primary/20 text-primary px-2 py-0.5 rounded-full text-[10px] font-bold">
+                  {validJugadores.length}
+                </span>
+              </div>
+              
+              {validJugadores.length > 0 && (
+                <button 
+                  onClick={selectAll}
+                  className="text-xs font-bold text-primary hover:underline flex items-center gap-1"
+                >
+                  {selectedPhones.length === validJugadores.length ? 'Desmarcar Todos' : 'Marcar Todos'}
+                </button>
+              )}
+            </div>
+            
+            <div className="flex flex-col max-h-[250px] overflow-y-auto bg-background p-1">
               {jugadores && jugadores.length > 0 ? (
-                jugadores.map((p: any) => (
-                  <button
-                    key={p.id}
-                    onClick={() => p.phone ? handleSendPlayer(p.phone) : handleSendGeneric()}
-                    className="flex items-center justify-between bg-green-50/30 hover:bg-green-100 p-2.5 rounded-lg text-sm text-left transition-colors border border-green-100/50 group"
-                  >
-                    <div className="flex flex-col">
-                      <span className="font-semibold text-green-900 text-sm">{p.first_name} {p.last_name}</span>
-                      <span className="text-xs text-green-700/70">{p.phone || 'Sin teléfono guardado'}</span>
-                    </div>
-                    {p.phone ? (
-                      <MessageCircle className="h-4 w-4 text-green-600 group-hover:scale-110 transition-transform" />
-                    ) : (
-                      <span className="text-[10px] text-muted-foreground uppercase font-bold bg-background px-1.5 py-0.5 rounded border">Sin cel</span>
-                    )}
-                  </button>
-                ))
+                jugadores.map((p: any) => {
+                  const hasPhone = !!p.phone;
+                  const isSelected = hasPhone && selectedPhones.includes(p.phone);
+                  
+                  return (
+                    <label
+                      key={p.id}
+                      className={`flex items-center gap-3 p-2.5 rounded-md cursor-pointer transition-colors hover:bg-muted/50 ${isSelected ? 'bg-primary/5 border-primary/20' : 'border-transparent'} ${!hasPhone ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      <input 
+                        type="checkbox"
+                        disabled={!hasPhone}
+                        checked={isSelected}
+                        onChange={() => hasPhone && toggleSelect(p.phone)}
+                        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary disabled:opacity-50"
+                      />
+                      <div className="flex flex-col flex-1">
+                        <span className="font-bold text-sm flex items-center gap-2">
+                          {p.first_name} {p.last_name}
+                          <span className="bg-secondary text-secondary-foreground px-1.5 py-0.5 rounded-md text-[10px] font-bold border">
+                            {p.category}
+                          </span>
+                        </span>
+                        <span className="text-[11px] text-muted-foreground font-medium mt-0.5">
+                          {p.phone || 'Sin número registrado'}
+                        </span>
+                      </div>
+                      {hasPhone && (
+                        <MessageCircle className={`h-4 w-4 transition-colors ${isSelected ? 'text-primary' : 'text-muted-foreground/30'}`} />
+                      )}
+                    </label>
+                  )
+                })
               ) : (
-                <div className="text-sm text-muted-foreground italic p-4 text-center border rounded-lg bg-muted/20">
-                  No hay jugadores agendados en el club.
+                <div className="text-sm text-muted-foreground italic p-4 text-center">
+                  No hay jugadores registrados con número.
                 </div>
               )}
             </div>
+            
+            {/* Action Bar (Queue) */}
+            {selectedPhones.length > 0 && (
+              <div className="p-3 bg-muted border-t flex items-center justify-between">
+                <span className="text-xs font-bold text-muted-foreground">
+                  {selectedPhones.length} {selectedPhones.length === 1 ? 'seleccionado' : 'seleccionados'}
+                </span>
+                
+                {sendingIndex === -1 ? (
+                  <button
+                    onClick={startSending}
+                    className="flex items-center gap-1.5 bg-primary text-primary-foreground px-3 py-1.5 rounded-md text-sm font-bold hover:bg-primary/90 transition-transform active:scale-95"
+                  >
+                    <MessageCircle className="h-4 w-4" />
+                    Enviar WhatsApp
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs font-bold text-primary">
+                      {sendingIndex + 1} de {selectedPhones.length}
+                    </span>
+                    <button
+                      onClick={sendNext}
+                      className="flex items-center gap-1.5 bg-green-600 text-white px-3 py-1.5 rounded-md text-sm font-bold hover:bg-green-700 transition-transform active:scale-95"
+                    >
+                      {sendingIndex + 1 < selectedPhones.length ? 'Siguiente ->' : 'Finalizar'}
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </DialogContent>

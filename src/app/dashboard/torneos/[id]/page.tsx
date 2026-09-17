@@ -200,27 +200,27 @@ export default async function TorneoDetallePage({ params }: { params: { id: stri
           <Card className="shadow-sm">
             <CardContent className="p-0">
               {inscriptos && inscriptos.length > 0 ? (
-                <ul className="flex flex-col gap-4 p-4">
+                <ul className="flex flex-col gap-5 p-4">
                   {inscriptos.map((equipo, index) => {
                     const hasRestriction = Boolean(equipo.time_availability) || (Array.isArray(equipo.availability) && equipo.availability.some((a: any) => a.status && a.status !== 'ALL_DAY' && a.status !== 'TODO_EL_DIA'));
                     return (
-                    <li key={equipo.id} className={`relative p-3 rounded-xl border shadow-sm transition-all hover:shadow-md flex flex-col gap-3 ${hasRestriction ? 'border-l-4 border-l-amber-400 bg-amber-50/40 dark:bg-amber-900/10' : 'bg-card'}`}>
+                    <li key={equipo.id} className={`relative p-4 rounded-xl border-2 shadow-sm transition-all hover:shadow-md flex flex-col gap-4 ${hasRestriction ? 'border-amber-400 bg-amber-50/40 dark:bg-amber-900/10' : 'border-border hover:border-primary/40 bg-card'}`}>
                       
                       {/* Cabecera de la Tarjeta */}
-                      <div className="flex items-start justify-between border-b border-border/60 pb-2">
+                      <div className="flex items-start justify-between border-b pb-3">
                         <div className="flex flex-col gap-1.5">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-extrabold text-sm tracking-tight text-foreground">
+                            <span className="font-extrabold text-base tracking-tight text-foreground bg-primary/10 text-primary px-2 py-0.5 rounded-md">
                               Pareja {index + 1}
                             </span>
                             {hasRestriction && (
-                               <span className="px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200 dark:bg-amber-900 dark:text-amber-300 dark:border-amber-800 text-[9px] font-bold uppercase tracking-wider leading-none">
-                                 Con Restricciones
+                               <span className="px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 border border-amber-200 dark:bg-amber-900/50 dark:text-amber-300 dark:border-amber-800/50 text-[10px] font-bold uppercase tracking-wider leading-none flex items-center gap-1">
+                                 ⏱️ Restringido
                                </span>
                             )}
                           </div>
                           
-                          <div className="flex items-center gap-1.5 flex-wrap">
+                          <div className="flex items-center gap-1.5 flex-wrap mt-1">
                             <BotonEditarPareja 
                               teamId={equipo.id} 
                               tournamentId={torneo.id} 
@@ -242,17 +242,17 @@ export default async function TorneoDetallePage({ params }: { params: { id: stri
                       </div>
                       
                       {/* Lista de Jugadores */}
-                      <div className="flex flex-col gap-1.5">
-                        <div className="flex items-center justify-between bg-muted/40 dark:bg-muted/20 px-3 py-1.5 rounded-md border border-muted">
-                          <span className="text-sm font-medium">{equipo.player1?.first_name} {equipo.player1?.last_name}</span>
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center justify-between bg-background px-3 py-2.5 rounded-lg border shadow-sm group hover:border-primary/20 transition-colors">
+                          <span className="text-sm font-bold">{equipo.player1?.first_name} {equipo.player1?.last_name}</span>
                           <div className="flex items-center gap-1.5 shrink-0">
                             {!equipo.has_paid_p1 && <BotonWhatsAppPago playerName={equipo.player1?.first_name} phone={equipo.player1?.phone} torneoName={torneo.name} />}
                             <BotonPago teamId={equipo.id} playerNum={1} hasPaid={equipo.has_paid_p1} tournamentId={torneo.id} />
                           </div>
                         </div>
                         
-                        <div className="flex items-center justify-between bg-muted/40 dark:bg-muted/20 px-3 py-1.5 rounded-md border border-muted">
-                          <span className={`text-sm font-medium ${!equipo.player2 ? 'text-muted-foreground italic' : ''}`}>
+                        <div className="flex items-center justify-between bg-background px-3 py-2.5 rounded-lg border shadow-sm group hover:border-primary/20 transition-colors">
+                          <span className={`text-sm font-bold ${!equipo.player2 ? 'text-muted-foreground italic' : ''}`}>
                             {equipo.player2 ? `${equipo.player2.first_name} ${equipo.player2.last_name}` : 'A designar'}
                           </span>
                           {equipo.player2 && (

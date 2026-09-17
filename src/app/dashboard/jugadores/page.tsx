@@ -217,13 +217,14 @@ export default async function JugadoresPage({ searchParams }: { searchParams: { 
                       <td className="hidden lg:table-cell px-4 py-2.5 text-muted-foreground text-sm">
                         {jugador.dni || '-'}
                       </td>
-                      <td className="px-1 sm:px-2 md:px-4 py-2 sm:py-2.5 text-right flex justify-end gap-1 sm:gap-1.5">
+                      <td className="px-1 sm:px-2 md:px-4 py-2 sm:py-2.5 text-right flex justify-end gap-1">
                         <Link 
                           href={`/dashboard/jugadores/${jugador.id}/editar`}
-                          className="flex items-center gap-1.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 hover:brightness-110 px-2.5 py-1.5 rounded-md transition-all active:scale-95 shadow-sm"
+                          className="flex items-center justify-center h-8 w-8 text-muted-foreground hover:text-blue-600 hover:bg-blue-600/10 rounded-md transition-colors"
+                          title="Editar"
                         >
-                          <Pencil className="h-3.5 w-3.5" />
-                          <span className="hidden sm:inline">Editar</span>
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
                         </Link>
                         <form action={async (formData) => {
                           'use server'
@@ -234,10 +235,11 @@ export default async function JugadoresPage({ searchParams }: { searchParams: { 
                           <input type="hidden" name="id" value={jugador.id} />
                           <button 
                             type="submit" 
-                            className="flex items-center gap-1.5 text-xs font-bold text-white bg-red-500 hover:bg-red-600 hover:brightness-110 px-2.5 py-1.5 rounded-md transition-all active:scale-95 shadow-sm"
+                            className="flex items-center justify-center h-8 w-8 text-muted-foreground hover:text-red-600 hover:bg-red-600/10 rounded-md transition-colors"
+                            title="Eliminar"
                           >
-                            <Trash2 className="h-3.5 w-3.5" />
-                            <span className="hidden sm:inline">Eliminar</span>
+                            <Trash2 className="h-4 w-4" />
+                            <span className="sr-only">Eliminar</span>
                           </button>
                         </form>
                       </td>

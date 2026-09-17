@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { PadelRacketLetterD, PadelRacketHit } from '@/components/logo-icons'
 
 export default function LoginPage({
   searchParams,
@@ -82,8 +83,15 @@ export default function LoginPage({
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center min-h-screen mx-auto py-12 overflow-y-auto">
       <Card className="shadow-lg my-auto">
         <CardHeader>
-          <CardTitle className="text-2xl text-center text-primary">
-            {isRegister ? 'Registrar Club' : 'Padel SaaS'}
+          <CardTitle className="text-2xl text-center text-primary flex items-center justify-center">
+            {isRegister ? 'Registrar Club' : (
+              <div className="flex items-center">
+                <span className="font-bold tracking-tight flex items-center">
+                  Pa<PadelRacketLetterD className="h-7 w-6 inline-block -ml-[1px] -mr-[1px] text-primary" />el SaaS
+                </span>
+                <PadelRacketHit className="h-7 w-7 ml-1.5 text-primary" />
+              </div>
+            )}
           </CardTitle>
           <CardDescription className="text-center">
             {isRegister ? 'Ingresa los datos para crear tu cuenta' : 'Inicia sesión con tu Usuario'}

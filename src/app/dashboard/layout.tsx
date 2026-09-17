@@ -4,6 +4,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose 
 import { Menu, PlusCircle, UserPlus, LogOut, Trophy, Users, ShieldAlert, LayoutDashboard, Lightbulb, Phone, Mail, ChevronDown, Calendar, Grid2X2 } from 'lucide-react'
 import Link from 'next/link'
 import { ModeToggle } from '@/components/mode-toggle'
+import { PadelRacketLetterD, PadelRacketHit } from '@/components/logo-icons'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const supabase = createClient()
@@ -131,7 +132,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
                 </div>
               </SheetContent>
             </Sheet>
-            <span className="font-bold text-lg text-primary ml-2">Padel SaaS</span>
+            <div className="flex items-center ml-2">
+              <span className="font-bold text-xl text-primary tracking-tight flex items-center">
+                Pa<PadelRacketLetterD className="h-6 w-5 inline-block -ml-[1px] -mr-[1px] text-primary" />el SaaS
+              </span>
+              <PadelRacketHit className="h-6 w-6 ml-1.5 text-primary" />
+            </div>
           </div>
           <div className="flex items-center gap-4">
             <div className="hidden sm:flex flex-col items-end">

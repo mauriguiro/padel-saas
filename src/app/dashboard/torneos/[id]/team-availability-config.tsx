@@ -86,10 +86,7 @@ export function TeamAvailabilityConfig({
     <div className="flex flex-col gap-3">
       <input type="hidden" name="availability" value={JSON.stringify(availability)} />
       
-      <div className="flex items-center gap-2 mb-1">
-        <Clock className="h-4 w-4 text-muted-foreground" />
-        <Label className="font-semibold text-foreground">Disponibilidad en Fase de Grupos</Label>
-      </div>
+
 
       <div className="flex flex-col gap-2 max-h-60 overflow-y-auto pr-2">
         {scheduleConfig.map((day) => {

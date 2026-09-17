@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Users, X } from 'lucide-react'
+import { Users, X, Clock, ChevronDown } from 'lucide-react'
 import { inscribirPareja } from './actions'
 import { TeamAvailabilityConfig } from './team-availability-config'
 
@@ -183,7 +183,18 @@ export function InscribirParejaModal({
           />
 
           <div className="mt-2 border-t pt-4">
-            <TeamAvailabilityConfig scheduleConfig={scheduleConfig} />
+            <details className="group">
+              <summary className="flex items-center justify-between cursor-pointer list-none text-sm font-semibold text-foreground hover:text-primary transition-colors">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4" />
+                  Restricciones Horarias (Opcional)
+                </div>
+                <ChevronDown className="h-4 w-4 text-muted-foreground group-open:rotate-180 transition-transform" />
+              </summary>
+              <div className="mt-4 animate-in fade-in slide-in-from-top-2 duration-200">
+                <TeamAvailabilityConfig scheduleConfig={scheduleConfig} />
+              </div>
+            </details>
           </div>
 
           {error && <p className="text-sm text-destructive font-medium">{error}</p>}

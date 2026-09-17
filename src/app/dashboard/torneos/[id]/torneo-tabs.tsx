@@ -8,21 +8,19 @@ export function TorneoTabs({
   torneo, 
   partidos, 
   courts,
-  FixtureView,
-  BracketView,
+  CronogramaView,
   InscriptosView,
   isReadOnly = false
 }: { 
   torneo: any, 
   partidos: any[], 
   courts: any[],
-  FixtureView: React.ReactNode,
-  BracketView: React.ReactNode,
+  CronogramaView: React.ReactNode,
   InscriptosView: React.ReactNode,
   isReadOnly?: boolean
 }) {
-  // If tournament is open, default to inscriptos. Otherwise default to fixture.
-  const [activeTab, setActiveTab] = useState<'inscriptos' | 'fixture' | 'bracket' | 'planificador'>(torneo.status === 'OPEN' ? 'inscriptos' : 'fixture')
+  // If tournament is open, default to inscriptos. Otherwise default to cronograma.
+  const [activeTab, setActiveTab] = useState<'inscriptos' | 'cronograma' | 'planificador'>(torneo.status === 'OPEN' ? 'inscriptos' : 'cronograma')
 
   return (
     <div className="w-full flex flex-col gap-4">
@@ -38,16 +36,10 @@ export function TorneoTabs({
           {torneo.status !== 'OPEN' && (
             <>
               <button 
-                onClick={() => setActiveTab('fixture')}
-                className={`px-4 py-2 text-sm rounded-sm font-bold transition-colors whitespace-nowrap ${activeTab === 'fixture' ? 'bg-background shadow-sm text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+                onClick={() => setActiveTab('cronograma')}
+                className={`px-4 py-2 text-sm rounded-sm font-bold transition-colors whitespace-nowrap ${activeTab === 'cronograma' ? 'bg-background shadow-sm text-primary' : 'text-muted-foreground hover:text-foreground'}`}
               >
-                Fase de Grupos
-              </button>
-              <button 
-                onClick={() => setActiveTab('bracket')}
-                className={`px-4 py-2 text-sm rounded-sm font-bold transition-colors whitespace-nowrap ${activeTab === 'bracket' ? 'bg-background shadow-sm text-primary' : 'text-muted-foreground hover:text-foreground'}`}
-              >
-                Cuadro Final (Llaves)
+                Cronograma de Partidos
               </button>
               <button 
                 onClick={() => setActiveTab('planificador')}
@@ -61,8 +53,7 @@ export function TorneoTabs({
       </div>
       
       {activeTab === 'inscriptos' && InscriptosView}
-      {activeTab === 'fixture' && FixtureView}
-      {activeTab === 'bracket' && BracketView}
+      {activeTab === 'cronograma' && CronogramaView}
       {activeTab === 'planificador' && (
         <PlanificadorCanchas 
           initialMatches={partidos || []} 

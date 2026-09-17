@@ -14,8 +14,7 @@ import { generarFixture, finalizarTorneo } from './actions'
 import { TorneoTabs } from './torneo-tabs'
 import { BotonVerificarPartido } from './boton-verificar-partido'
 import { BotonAvanzarRonda } from './boton-avanzar-ronda'
-import { TournamentBracket } from './tournament-bracket'
-import { FixtureView } from './fixture-view'
+import { CronogramaView } from './cronograma-view'
 import { FAP_BRACKETS } from '@/lib/fap-rules'
 
 export default async function TorneoDetallePage({ params }: { params: { id: string } }) {
@@ -298,23 +297,23 @@ export default async function TorneoDetallePage({ params }: { params: { id: stri
               </Card>
             </div>
           }
-          FixtureView={
-            <div className="min-h-[400px] w-full bg-background rounded-xl p-2 border">
-              <FixtureView torneo={torneo} dbMatches={partidos || []} />
-            </div>
-          }
-          BracketView={
-            <div className="min-h-[400px] w-full">
+          CronogramaView={
+            <div className="w-full">
             {torneo.status === 'OPEN' ? (
-              <Card className="h-full flex flex-col items-center justify-center bg-muted/10 border-dashed p-10">
+              <Card className="h-full flex flex-col items-center justify-center bg-muted/10 border-dashed p-10 min-h-[400px]">
                 <Trophy className="h-16 w-16 text-muted-foreground mx-auto mb-4 opacity-40" />
                 <h3 className="text-xl font-bold">Sorteo Pendiente</h3>
                 <p className="text-muted-foreground mt-2 text-sm text-center max-w-sm">
-                  Inscribe al menos a 2 parejas. El fixture matemático cruzará a los jugadores al azar cuando presiones "Sortear".
+                  Inscribe al menos a 2 parejas. El fixture generará los partidos y horarios al presionar "Sortear".
                 </p>
               </Card>
             ) : (
-              <TournamentBracket torneo={torneo} dbMatches={partidos || []} fapConfig={FAP_BRACKETS[inscriptos?.length || 6] || FAP_BRACKETS[6]} />
+              <CronogramaView 
+                torneo={torneo} 
+                dbMatches={partidos || []} 
+                courts={courts || []} 
+                fapConfig={FAP_BRACKETS[inscriptos?.length || 6] || FAP_BRACKETS[6]} 
+              />
             )}
             </div>
           }

@@ -23,7 +23,7 @@ export function PlayerDetailsModal({
       
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-xl font-black text-primary">
+          <DialogTitle className="text-xl font-black text-white drop-shadow-sm">
             {jugador.first_name} {jugador.last_name}
           </DialogTitle>
         </DialogHeader>

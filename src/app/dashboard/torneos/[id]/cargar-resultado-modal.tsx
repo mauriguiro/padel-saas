@@ -50,8 +50,8 @@ export function CargarResultadoModal({
         type="button"
         className={`flex-1 flex items-center justify-center gap-1 text-xs font-bold py-1.5 px-2 rounded-md transition-all ${
           isEdit 
-          ? 'bg-background border border-muted-foreground/30 text-muted-foreground hover:bg-muted hover:text-foreground shadow-sm' 
-          : 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border border-emerald-200 shadow-sm'
+          ? 'bg-background border border-muted-foreground/30 text-foreground hover:bg-muted shadow-sm' 
+          : 'bg-emerald-100 text-black hover:bg-emerald-200 border border-emerald-200 shadow-sm'
         }`}
       >
         {isEdit && <Pencil className="h-3 w-3" />}

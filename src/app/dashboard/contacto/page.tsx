@@ -35,10 +35,10 @@ export default function ContactoPage() {
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm border-t-4 border-t-blue-500">
+        <Card className="shadow-sm border-t-4 border-t-green-500">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Mail className="h-5 w-5 text-blue-600" />
+              <Mail className="h-5 w-5 text-green-600" />
               Correo Electrónico
             </CardTitle>
             <CardDescription>Para consultas formales o reportar problemas técnicos.</CardDescription>
@@ -48,7 +48,7 @@ export default function ContactoPage() {
               <p className="text-sm text-foreground font-medium">soporte@tudominio.com</p>
               <a
                 href="mailto:soporte@tudominio.com"
-                className="bg-blue-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-blue-700 transition-colors text-center text-sm shadow-sm"
+                className="bg-green-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-green-700 transition-colors text-center text-sm shadow-sm"
               >
                 Enviar correo electrónico
               </a>

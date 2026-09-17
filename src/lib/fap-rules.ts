@@ -358,7 +358,7 @@ export const FAP_BRACKETS: Record<number, FapConfig> = {
     zones: [4, 4, 3, 3, 3, 3, 3, 3, 3],
     matches: [
       { id: 34, team1: '2B', team2: '2C' },
-      { id: 39, cap: true, team1: '2F', team2: '3B' },
+      { id: 39, team1: '2F', team2: '3B' },
       { id: 42, team1: '3A', team2: '2E' },
       { id: 47, team1: '2D', team2: '2A' },
       { id: 49, team1: '1A', team2: 'W34' },

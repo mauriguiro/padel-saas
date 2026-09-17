@@ -294,7 +294,7 @@ export default async function NuevoTorneoPage() {
                 <Input name="points_zone" type="number" defaultValue={10} required className="h-10 text-center font-bold" />
               </div>
             </div>
-            <p className="text-[11px] text-muted-foreground bg-blue-50/50 p-2 rounded-md border border-blue-100 text-blue-800">
+            <p className="text-[11px] text-muted-foreground bg-green-50/50 p-2 rounded-md border border-green-100 text-green-800">
               * Estos puntos se repartirán automáticamente cuando presiones "Finalizar Torneo" en el panel de control.
             </p>
           </CardContent>

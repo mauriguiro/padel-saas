@@ -71,7 +71,7 @@ export default async function SolicitudesPage() {
         {incomingRequests && incomingRequests.length > 0 ? (
           <div className="grid gap-4">
             {incomingRequests.map((req: any) => (
-              <Card key={req.id} className="border-blue-200 shadow-sm bg-blue-50/10">
+              <Card key={req.id} className="border-green-200 shadow-sm bg-green-50/10">
                 <CardContent className="p-6 flex flex-col md:flex-row items-center justify-between gap-4">
                   <div>
                     <h3 className="font-bold text-lg uppercase">{req.name}</h3>

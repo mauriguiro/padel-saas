@@ -10,9 +10,10 @@ import { BotonCabezaSerie } from './boton-cabeza-serie'
 import { BotonEliminarInscripcion } from './boton-eliminar-inscripcion'
 import { BotonEditarPareja } from './BotonEditarPareja'
 import { BotonWhatsAppPromo, BotonWhatsAppPago, BotonWhatsAppPartido } from './whatsapp-botones'
-import { generarFixture, avanzarRonda, finalizarTorneo } from './actions'
+import { generarFixture, finalizarTorneo } from './actions'
 import { TorneoTabs } from './torneo-tabs'
 import { BotonVerificarPartido } from './boton-verificar-partido'
+import { BotonAvanzarRonda } from './boton-avanzar-ronda'
 
 export default async function TorneoDetallePage({ params }: { params: { id: string } }) {
   const supabase = createClient()
@@ -151,14 +152,17 @@ export default async function TorneoDetallePage({ params }: { params: { id: stri
             <div className="flex flex-wrap gap-3">
               {torneo.status === 'OPEN' && (
                 <>
-                  <BotonWhatsAppPromo torneoName={torneo.name} />
                   <InscribirParejaModal 
                     tournamentId={torneo.id} 
                     jugadores={jugadores || []} 
                     inscriptosIds={Array.from(inscritosIds)}
                     scheduleConfig={torneo.schedule_config}
                   />
-                  <form action={generarFixture} className="w-full sm:w-auto">
+                  <BotonWhatsAppPromo torneoName={torneo.name} jugadores={jugadores || []} />
+                  <form action={async (formData) => {
+                    'use server'
+                    await generarFixture(formData)
+                  }} className="w-full sm:w-auto">
                     <input type="hidden" name="tournament_id" value={torneo.id} />
                     <button type="submit" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md font-bold shadow-md transition-transform hover:-translate-y-0.5">
                       <Play className="h-4 w-4" />
@@ -170,14 +174,11 @@ export default async function TorneoDetallePage({ params }: { params: { id: stri
 
               {torneo.status === 'IN_PROGRESS' && (
                 <>
-                  <form action={avanzarRonda} className="w-full sm:w-auto">
-                    <input type="hidden" name="tournament_id" value={torneo.id} />
-                    <button type="submit" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-md font-bold shadow-md transition-transform hover:-translate-y-0.5">
-                      <Trophy className="h-4 w-4" />
-                      Generar Siguiente Ronda
-                    </button>
-                  </form>
-                  <form action={finalizarTorneo} className="w-full sm:w-auto">
+                  <BotonAvanzarRonda tournamentId={torneo.id} />
+                  <form action={async (formData) => {
+                    'use server'
+                    await finalizarTorneo(formData)
+                  }} className="w-full sm:w-auto">
                     <input type="hidden" name="tournament_id" value={torneo.id} />
                     <button type="submit" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-green-600 text-white hover:bg-green-700 px-4 py-2 rounded-md font-bold shadow-md transition-transform hover:-translate-y-0.5">
                       <CheckCircle2 className="h-4 w-4" />
@@ -200,8 +201,10 @@ export default async function TorneoDetallePage({ params }: { params: { id: stri
             <CardContent className="p-0">
               {inscriptos && inscriptos.length > 0 ? (
                 <ul className="flex flex-col gap-4 p-4">
-                  {inscriptos.map((equipo, index) => (
-                    <li key={equipo.id} className={`relative p-3 rounded-xl border shadow-sm transition-all hover:shadow-md flex flex-col gap-3 ${equipo.time_availability || equipo.availability ? 'border-l-4 border-l-amber-400 bg-amber-50/40 dark:bg-amber-900/10' : 'bg-card'}`}>
+                  {inscriptos.map((equipo, index) => {
+                    const hasRestriction = Boolean(equipo.time_availability) || (Array.isArray(equipo.availability) && equipo.availability.some((a: any) => a.status && a.status !== 'ALL_DAY' && a.status !== 'TODO_EL_DIA'));
+                    return (
+                    <li key={equipo.id} className={`relative p-3 rounded-xl border shadow-sm transition-all hover:shadow-md flex flex-col gap-3 ${hasRestriction ? 'border-l-4 border-l-amber-400 bg-amber-50/40 dark:bg-amber-900/10' : 'bg-card'}`}>
                       
                       {/* Cabecera de la Tarjeta */}
                       <div className="flex items-start justify-between border-b border-border/60 pb-2">
@@ -210,7 +213,7 @@ export default async function TorneoDetallePage({ params }: { params: { id: stri
                             <span className="font-extrabold text-sm tracking-tight text-foreground">
                               Pareja {index + 1}
                             </span>
-                            {(equipo.time_availability || equipo.availability) && (
+                            {hasRestriction && (
                                <span className="px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200 dark:bg-amber-900 dark:text-amber-300 dark:border-amber-800 text-[9px] font-bold uppercase tracking-wider leading-none">
                                  Con Restricciones
                                </span>
@@ -261,7 +264,8 @@ export default async function TorneoDetallePage({ params }: { params: { id: stri
                         </div>
                       </div>
                     </li>
-                  ))}
+                    );
+                  })}
                 </ul>
               ) : (
                 <div className="p-8 text-center text-muted-foreground">

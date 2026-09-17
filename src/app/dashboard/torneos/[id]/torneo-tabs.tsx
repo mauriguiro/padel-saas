@@ -56,6 +56,8 @@ export function TorneoTabs({
           courts={courts || []} 
           tournamentId={torneo.id}
           isReadOnly={isReadOnly}
+          scheduleConfig={torneo.schedule_config}
+          matchDuration={torneo.match_duration_min}
         />
       )}
     </div>

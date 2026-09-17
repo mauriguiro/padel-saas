@@ -13,7 +13,7 @@ type DayConfig = {
   lastMatchTime: string
 }
 
-export type AvailabilityStatus = 'ALL_DAY' | 'UNAVAILABLE' | 'RANGE'
+export type AvailabilityStatus = 'TODO_EL_DIA' | 'NO_PUEDE' | 'RANGO'
 
 export type TeamDayAvailability = {
   date: string
@@ -35,11 +35,18 @@ export function TeamAvailabilityConfig({
     // Inicializar disponibilidad para cada día del torneo
     const initial = scheduleConfig.map(day => {
       const existing = initialAvailability.find(a => a.date === day.date)
-      if (existing) return existing
+      if (existing) {
+        // Migración de datos antiguos si existen
+        let status = existing.status as string;
+        if (status === 'ALL_DAY') status = 'TODO_EL_DIA';
+        if (status === 'RANGE') status = 'RANGO';
+        if (status === 'UNAVAILABLE') status = 'NO_PUEDE';
+        return { ...existing, status: status as AvailabilityStatus };
+      }
       
       return {
         date: day.date,
-        status: 'ALL_DAY' as AvailabilityStatus,
+        status: 'TODO_EL_DIA' as AvailabilityStatus,
         startTime: day.startTime,
         endTime: day.lastMatchTime
       }
@@ -57,8 +64,8 @@ export function TeamAvailabilityConfig({
         ...a,
         status,
         // Reset times if they switch back to range or all day
-        startTime: status === 'RANGE' ? (a.startTime || dayConf?.startTime) : undefined,
-        endTime: status === 'RANGE' ? (a.endTime || dayConf?.lastMatchTime) : undefined
+        startTime: status === 'RANGO' ? (a.startTime || dayConf?.startTime) : undefined,
+        endTime: status === 'RANGO' ? (a.endTime || dayConf?.lastMatchTime) : undefined
       }
     }))
   }
@@ -95,20 +102,20 @@ export function TeamAvailabilityConfig({
                 <span className="text-sm font-semibold whitespace-nowrap">{day.dateLabel}</span>
                 <Select 
                   value={dayAv.status} 
-                  onValueChange={(val: AvailabilityStatus) => handleStatusChange(day.date, val)}
+                  onValueChange={(val: string) => handleStatusChange(day.date, val as AvailabilityStatus)}
                 >
                   <SelectTrigger className="h-8 w-full sm:w-[160px] text-xs">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="ALL_DAY">Todo el día</SelectItem>
-                    <SelectItem value="RANGE">En cierto horario...</SelectItem>
-                    <SelectItem value="UNAVAILABLE">No puede jugar</SelectItem>
+                    <SelectItem value="TODO_EL_DIA">Todo el día</SelectItem>
+                    <SelectItem value="RANGO">En cierto horario...</SelectItem>
+                    <SelectItem value="NO_PUEDE">No puede jugar</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              {dayAv.status === 'RANGE' && (
+              {dayAv.status === 'RANGO' && (
                 <div className="flex items-center gap-2 mt-1">
                   <div className="flex flex-col gap-1 flex-1">
                     <Label className="text-[10px] text-muted-foreground">Desde</Label>

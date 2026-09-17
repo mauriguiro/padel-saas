@@ -57,13 +57,13 @@ export default async function TorneosHistorialPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
         {torneosHistorial.map((torneo) => (
-          <Card key={torneo.id} className="hover:shadow-md transition-shadow flex flex-col">
-            <CardHeader className="pb-2 border-b bg-muted/20">
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-2 overflow-hidden">
+          <Card key={torneo.id} className="hover:shadow-md transition-shadow flex flex-col overflow-visible">
+            <CardHeader className="pb-2 border-b bg-muted/20 rounded-t-xl">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-2">
                 <div className="flex flex-col gap-1 min-w-0">
                   <CardTitle className="text-lg leading-tight truncate uppercase" title={torneo.name}>{torneo.name}</CardTitle>
                   {torneo.is_zonal && (
-                    <span className="text-[10px] font-bold uppercase bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full w-fit">
+                    <span className="text-[10px] font-bold uppercase bg-green-100 text-green-700 px-2 py-0.5 rounded-full w-fit">
                       Torneo Zonal
                     </span>
                   )}

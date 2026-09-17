@@ -139,7 +139,7 @@ export default async function JugadoresPage({ searchParams }: { searchParams: { 
         </Link>
         <Link 
           href={`/dashboard/jugadores?q=${searchQuery}&sort=${sortBy}&order=${sortOrder}&category=${categoryFilter}&gender=Masculino`}
-          className={`flex items-center justify-center text-center px-1 md:px-6 py-2.5 text-[11px] sm:text-xs md:text-sm font-black tracking-tighter md:tracking-wide rounded-full border-2 transition-all active:border-b-2 active:translate-y-[2px] ${genderFilter === 'Masculino' ? 'bg-blue-600 text-white border-blue-700 border-b-[4px] hover:brightness-110 shadow-sm' : 'bg-background text-muted-foreground border-muted-foreground/20 border-b-[4px] hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300 dark:hover:bg-blue-950 dark:hover:text-blue-400'}`}
+          className={`flex items-center justify-center text-center px-1 md:px-6 py-2.5 text-[11px] sm:text-xs md:text-sm font-black tracking-tighter md:tracking-wide rounded-full border-2 transition-all active:border-b-2 active:translate-y-[2px] ${genderFilter === 'Masculino' ? 'bg-green-600 text-white border-green-700 border-b-[4px] hover:brightness-110 shadow-sm' : 'bg-background text-muted-foreground border-muted-foreground/20 border-b-[4px] hover:bg-green-50 hover:text-green-600 hover:border-green-300 dark:hover:bg-blue-950 dark:hover:text-green-400'}`}
         >
           Masculinos
         </Link>
@@ -220,7 +220,7 @@ export default async function JugadoresPage({ searchParams }: { searchParams: { 
                       <td className="px-1 sm:px-2 md:px-4 py-2 sm:py-2.5 text-right flex justify-end gap-1">
                         <Link 
                           href={`/dashboard/jugadores/${jugador.id}/editar`}
-                          className="flex items-center justify-center h-8 w-8 text-muted-foreground hover:text-blue-600 hover:bg-blue-600/10 rounded-md transition-colors"
+                          className="flex items-center justify-center h-8 w-8 text-muted-foreground hover:text-green-600 hover:bg-green-600/10 rounded-md transition-colors"
                           title="Editar"
                         >
                           <Pencil className="h-4 w-4" />

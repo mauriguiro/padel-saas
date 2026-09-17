@@ -9,13 +9,18 @@ export function CourtColumn({
   id, 
   title, 
   matches,
-  isUnassigned 
+  isUnassigned,
+  isReadOnly,
+  scheduleConfig = [],
+  matchDuration = 90
 }: { 
   id: string, 
   title: string, 
   matches: any[],
   isUnassigned?: boolean,
-  isReadOnly?: boolean
+  isReadOnly?: boolean,
+  scheduleConfig?: any[],
+  matchDuration?: number
 }) {
   const { setNodeRef, isOver } = useDroppable({
     id: id,
@@ -40,7 +45,13 @@ export function CourtColumn({
           strategy={verticalListSortingStrategy}
         >
           {matches.map(match => (
-            <SortableMatchCard key={match.id} match={match} disabled={isReadOnly} />
+            <SortableMatchCard 
+              key={match.id} 
+              match={match} 
+              disabled={isReadOnly}
+              scheduleConfig={scheduleConfig}
+              matchDuration={matchDuration}
+            />
           ))}
         </SortableContext>
         

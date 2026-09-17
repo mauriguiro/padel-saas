@@ -152,9 +152,9 @@ export function ScheduleConfig({ courts }: { courts: Court[] }) {
 
       {/* Daily Schedule Card */}
       {days.length > 0 && (
-        <Card className="shadow-sm border-blue-100">
-          <CardHeader className="pb-3 border-b bg-blue-50/30">
-            <CardTitle className="text-lg flex items-center gap-2 text-blue-800">
+        <Card className="shadow-sm border-green-100">
+          <CardHeader className="pb-3 border-b bg-green-50/30">
+            <CardTitle className="text-lg flex items-center gap-2 text-green-800">
               <Clock className="h-5 w-5" />
               Horarios por Día
             </CardTitle>

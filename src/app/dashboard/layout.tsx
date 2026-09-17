@@ -57,14 +57,14 @@ export default async function DashboardLayout({ children }: { children: React.Re
                   
                   <SheetClose asChild>
                     <Link href="/dashboard" className="flex items-center gap-3 px-3 py-3 hover:bg-accent rounded-md text-sm font-medium transition-colors">
-                      <LayoutDashboard strokeWidth={1.5} className="h-5 w-5 text-blue-500" />
+                      <LayoutDashboard strokeWidth={1.5} className="h-5 w-5 text-green-500" />
                       Inicio (Resumen)
                     </Link>
                   </SheetClose>
 
                   <SheetClose asChild>
                     <Link href="/dashboard/turnos" className="flex items-center gap-3 px-3 py-3 hover:bg-accent rounded-md text-sm font-medium transition-colors">
-                      <Calendar strokeWidth={1.5} className="h-5 w-5 text-indigo-500" />
+                      <Calendar strokeWidth={1.5} className="h-5 w-5 text-green-500" />
                       Turnos
                     </Link>
                   </SheetClose>

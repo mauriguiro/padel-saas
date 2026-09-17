@@ -78,8 +78,8 @@ export function BotonVerificarPartido({
         type="button"
         className={`flex-1 flex items-center justify-center gap-1.5 text-xs font-bold py-1.5 px-2 rounded-md transition-all border shadow-sm ${
           isVerified 
-          ? 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 dark:bg-blue-900/20 dark:border-blue-800' 
-          : 'bg-background text-muted-foreground border-muted-foreground/30 hover:bg-muted hover:text-foreground'
+          ? 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100 dark:bg-green-900/40 dark:border-green-800 dark:text-green-400' 
+          : 'bg-background text-foreground border-muted-foreground/30 hover:bg-muted shadow-sm'
         }`}
       >
         {isVerified ? (
@@ -128,21 +128,21 @@ export function BotonVerificarPartido({
 
               {loser.player2 && (
                 <a 
-                  href={generateWaLink(loser.player2.phone || '', loser.player2.first_name)}
+                  href={generateWaLink(loser.player2?.phone || '', loser.player2?.first_name || '')}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => {
-                    if (!loser.player2.phone) {
+                    if (!loser.player2?.phone) {
                       alert('Este jugador no tiene teléfono registrado')
                     }
                   }}
-                  className={`flex items-center justify-between p-3 rounded-md border ${loser.player2.phone ? 'hover:bg-green-50 hover:border-green-200 transition-colors cursor-pointer group' : 'bg-muted/50 opacity-60 cursor-not-allowed'}`}
+                  className={`flex items-center justify-between p-3 rounded-md border ${loser.player2?.phone ? 'hover:bg-green-50 hover:border-green-200 transition-colors cursor-pointer group' : 'bg-muted/50 opacity-60 cursor-not-allowed'}`}
                 >
                   <div className="flex flex-col">
-                    <span className="text-sm font-semibold">{loser.player2.first_name} {loser.player2.last_name}</span>
-                    <span className="text-xs text-muted-foreground">{loser.player2.phone || 'Sin teléfono'}</span>
+                    <span className="text-sm font-semibold">{loser.player2?.first_name} {loser.player2?.last_name}</span>
+                    <span className="text-xs text-muted-foreground">{loser.player2?.phone || 'Sin teléfono'}</span>
                   </div>
-                  <MessageCircle className={`h-5 w-5 ${loser.player2.phone ? 'text-green-600 group-hover:scale-110 transition-transform' : 'text-muted-foreground'}`} />
+                  <MessageCircle className={`h-5 w-5 ${loser.player2?.phone ? 'text-green-600 group-hover:scale-110 transition-transform' : 'text-muted-foreground'}`} />
                 </a>
               )}
             </div>
@@ -155,7 +155,7 @@ export function BotonVerificarPartido({
               className={`w-full py-2.5 rounded-md text-sm font-bold flex items-center justify-center gap-2 transition-colors ${
                 isVerified 
                 ? 'bg-muted text-foreground hover:bg-muted/80' 
-                : 'bg-blue-600 text-white hover:bg-blue-700 shadow-sm'
+                : 'bg-green-600 text-white hover:bg-green-700 shadow-sm'
               }`}
             >
               <BadgeCheck className="h-5 w-5" />

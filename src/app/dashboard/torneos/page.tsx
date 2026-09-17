@@ -63,13 +63,13 @@ export default async function TorneosPage() {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
         {lista.map((torneo) => (
-          <Card key={torneo.id} className="hover:shadow-md transition-shadow flex flex-col">
-            <CardHeader className="pb-2 border-b bg-muted/20">
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-2 overflow-hidden">
+          <Card key={torneo.id} className="hover:shadow-md transition-shadow flex flex-col overflow-visible">
+            <CardHeader className="pb-2 border-b bg-muted/20 rounded-t-xl">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-2">
                 <div className="flex flex-col gap-1 min-w-0">
                   <CardTitle className="text-lg leading-tight truncate uppercase" title={torneo.name}>{torneo.name}</CardTitle>
                   {torneo.is_zonal && (
-                    <span className="text-[10px] font-bold uppercase bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full w-fit">
+                    <span className="text-[10px] font-bold uppercase bg-green-100 text-green-700 px-2 py-0.5 rounded-full w-fit">
                       Torneo Zonal
                     </span>
                   )}
@@ -118,17 +118,17 @@ export default async function TorneosPage() {
       
       {/* Banner de Invitaciones Zonales */}
       {invitacionesCount && invitacionesCount > 0 ? (
-        <div className="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 rounded-lg p-4 flex items-center justify-between shadow-sm">
+        <div className="bg-green-50 dark:bg-blue-950/40 border border-green-200 dark:border-green-900 rounded-lg p-4 flex items-center justify-between shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="bg-blue-100 dark:bg-blue-900/50 p-2 rounded-full">
-              <svg className="h-5 w-5 text-blue-700 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+            <div className="bg-green-100 dark:bg-green-900/50 p-2 rounded-full">
+              <svg className="h-5 w-5 text-green-700 dark:text-green-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
             </div>
             <div>
-              <h3 className="font-bold text-blue-900 dark:text-blue-100">¡Tienes invitaciones a Torneos Zonales!</h3>
-              <p className="text-sm text-blue-700 dark:text-blue-300">Has sido invitado a co-organizar {invitacionesCount} torneo(s) combinado(s).</p>
+              <h3 className="font-bold text-green-900 dark:text-green-100">¡Tienes invitaciones a Torneos Zonales!</h3>
+              <p className="text-sm text-green-700 dark:text-green-300">Has sido invitado a co-organizar {invitacionesCount} torneo(s) combinado(s).</p>
             </div>
           </div>
-          <Link href="/dashboard/solicitudes" className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-bold shadow-sm hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors">
+          <Link href="/dashboard/solicitudes" className="bg-green-600 text-white px-4 py-2 rounded-md text-sm font-bold shadow-sm hover:bg-green-700 dark:hover:bg-green-500 transition-colors">
             Ver Invitaciones
           </Link>
         </div>

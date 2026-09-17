@@ -205,8 +205,10 @@ export async function generarFixture(formData: FormData) {
 
   if (!tournamentId) return { error: 'ID de torneo no válido' }
 
-  // Obtener formato de torneo
-  const { data: tournament } = await supabase.from('tournaments').select('tournament_format').eq('id', tournamentId).single()
+  // Obtener formato de torneo y configuración de horarios
+  const { data: tournament } = await supabase.from('tournaments')
+    .select('tournament_format, available_courts, schedule_config, match_duration_min')
+    .eq('id', tournamentId).single()
 
   // 1. Obtener los equipos inscriptos
   const { data: teams } = await supabase
@@ -219,7 +221,7 @@ export async function generarFixture(formData: FormData) {
   }
 
   const isZonas = tournament?.tournament_format === 'ZONAS_Y_PLAYOFFS'
-  const matchesToInsert = []
+  const matchesToInsert: any[] = []
 
   if (isZonas) {
     // Lógica ZONAS_Y_PLAYOFFS
@@ -301,6 +303,63 @@ export async function generarFixture(formData: FormData) {
       matchNumber++
     }
   }
+
+  // --- Lógica de asignación de canchas y horarios (Automática) ---
+  const schedule = tournament?.schedule_config || [];
+  const duration = tournament?.match_duration_min || 90;
+  const courts = tournament?.available_courts || [];
+
+  if (schedule.length > 0 && courts.length > 0 && matchesToInsert.length > 0) {
+    // Ordenamos los días por si acaso
+    const sortedDays = [...schedule].sort((a, b) => a.date.localeCompare(b.date));
+    
+    const parseTime = (timeStr: string) => {
+      const [h, m] = timeStr.split(':').map(Number);
+      return h * 60 + m;
+    };
+
+    let currentDayIdx = 0;
+    let currentDay = sortedDays[currentDayIdx];
+    let courtTimes = courts.map(() => parseTime(currentDay.startTime));
+    let courtTurns = courts.map(() => 0);
+    let endTime = parseTime(currentDay.lastMatchTime);
+
+    for (const match of matchesToInsert) {
+      let bestCourtIdx = 0;
+      let earliestTime = courtTimes[0];
+      
+      for (let i = 1; i < courtTimes.length; i++) {
+        if (courtTimes[i] < earliestTime) {
+          earliestTime = courtTimes[i];
+          bestCourtIdx = i;
+        }
+      }
+      
+      // Si la cancha más temprana ya se pasa de la hora de cierre, saltamos al siguiente día
+      if (earliestTime > endTime) {
+        currentDayIdx++;
+        if (currentDayIdx >= sortedDays.length) {
+          // No hay más días configurados, los dejamos sin asignar
+          break;
+        }
+        currentDay = sortedDays[currentDayIdx];
+        courtTimes = courts.map(() => parseTime(currentDay.startTime));
+        endTime = parseTime(currentDay.lastMatchTime);
+        
+        earliestTime = courtTimes[0];
+        bestCourtIdx = 0;
+      }
+      
+      // Asignar a este partido
+      match.court_id = courts[bestCourtIdx];
+      match.turn_order = courtTurns[bestCourtIdx];
+      
+      // Avanzar el reloj y el turno para esta cancha
+      courtTimes[bestCourtIdx] += duration;
+      courtTurns[bestCourtIdx]++;
+    }
+  }
+  // --- Fin Lógica ---
 
   // Guardar los partidos en la base de datos
   const { error: matchError } = await supabase
@@ -417,20 +476,8 @@ export async function guardarResultado(formData: FormData) {
     return { error: 'Error al guardar el resultado. Asegúrate de haber ejecutado el script de migración SQL en Supabase.' }
   }
 
-  // MAGIA: Verificar si terminaron todos los partidos de ZONAS
-  const { data: allZonasMatches } = await supabase
-    .from('matches')
-    .select('id, winner_id')
-    .eq('tournament_id', tournamentId)
-    .eq('stage', 'ZONAS')
-
-  if (allZonasMatches && allZonasMatches.length > 0) {
-    const allCompleted = allZonasMatches.every(m => m.winner_id !== null)
-    if (allCompleted) {
-      // Ya terminó la fase de zonas, generar playoffs
-      await generarPlayoffsDesdeZonas(tournamentId)
-    }
-  }
+  // Ya no generamos playoffs automáticamente al cargar resultados de zonas.
+  // El usuario lo hará manualmente con "Generar Siguiente Ronda"
 
   revalidatePath(`/dashboard/torneos/${tournamentId}`)
   return { success: true }
@@ -620,7 +667,24 @@ async function generarPlayoffsDesdeZonas(tournamentId: string) {
 
 export async function avanzarRonda(formData: FormData) {
   const tournamentId = formData.get('tournament_id') as string
+  const force = formData.get('force') === 'true'
   if (!tournamentId) return { error: 'ID inválido' }
+
+  const supabase = createClient()
+
+  if (!force) {
+    const { data: unverifiedMatches } = await supabase
+      .from('matches')
+      .select('id')
+      .eq('tournament_id', tournamentId)
+      .not('winner_id', 'is', null)
+      .eq('is_verified', false)
+      .limit(1)
+      
+    if (unverifiedMatches && unverifiedMatches.length > 0) {
+      return { error: 'UNVERIFIED' }
+    }
+  }
 
   await syncFapPlayoffs(tournamentId)
   

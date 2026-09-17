@@ -35,12 +35,16 @@ export function PlanificadorCanchas({
   initialMatches, 
   courts,
   tournamentId,
-  isReadOnly = false
+  isReadOnly = false,
+  scheduleConfig = [],
+  matchDuration = 90
 }: { 
   initialMatches: Match[], 
   courts: Court[],
   tournamentId: string,
-  isReadOnly?: boolean
+  isReadOnly?: boolean,
+  scheduleConfig?: any[],
+  matchDuration?: number
 }) {
   const [matches, setMatches] = useState<Match[]>(initialMatches)
   const [activeId, setActiveId] = useState<string | null>(null)
@@ -144,6 +148,8 @@ export function PlanificadorCanchas({
           isUnassigned={true}
           isReadOnly={isReadOnly}
           matches={matches.filter(m => m.court_id === null).sort((a,b) => a.turn_order - b.turn_order)}
+          scheduleConfig={scheduleConfig}
+          matchDuration={matchDuration}
         />
 
         {/* Columnas de Canchas */}
@@ -154,6 +160,8 @@ export function PlanificadorCanchas({
             title={court.name}
             isReadOnly={isReadOnly}
             matches={matches.filter(m => m.court_id === court.id).sort((a,b) => a.turn_order - b.turn_order)}
+            scheduleConfig={scheduleConfig}
+            matchDuration={matchDuration}
           />
         ))}
 
@@ -165,6 +173,8 @@ export function PlanificadorCanchas({
             <SortableMatchCard 
               match={matches.find(m => m.id === activeId)!} 
               isOverlay 
+              scheduleConfig={scheduleConfig}
+              matchDuration={matchDuration}
             />
           ) : null}
         </DragOverlay>

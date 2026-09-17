@@ -661,3 +661,105 @@ export async function toggleVerificado(matchId: string, isVerified: boolean, tou
   revalidatePath(`/dashboard/torneos/${tournamentId}`)
   return { success: true }
 }
+
+export async function finalizarTorneo(formData: FormData) {
+  const tournamentId = formData.get('tournament_id') as string
+  if (!tournamentId) return { error: 'ID requerido' }
+
+  const supabase = createClient()
+
+  // 1. Obtener torneo
+  const { data: torneo, error: errTorneo } = await supabase
+    .from('tournaments')
+    .select('*')
+    .eq('id', tournamentId)
+    .single()
+
+  if (errTorneo || !torneo) return { error: 'Torneo no encontrado' }
+  if (torneo.status === 'COMPLETED') return { error: 'El torneo ya está finalizado' }
+
+  // 2. Obtener partidos y equipos
+  const { data: matches } = await supabase
+    .from('matches')
+    .select('*')
+    .eq('tournament_id', tournamentId)
+
+  const { data: teams } = await supabase
+    .from('tournament_teams')
+    .select('id, player1_id, player2_id')
+    .eq('tournament_id', tournamentId)
+
+  if (!teams || !matches) return { error: 'Error al obtener datos' }
+
+  const pointsMap = {
+    winner: torneo.points_winner || 100,
+    runnerUp: torneo.points_runner_up || 90,
+    semi: torneo.points_semi || 80,
+    quarter: torneo.points_quarter || 60,
+    eighths: torneo.points_eighths || 40,
+    zone: torneo.points_zone || 10
+  }
+
+  const playerPointsUpdates: Record<string, number> = {}
+
+  teams.forEach(team => {
+    const teamMatches = matches.filter(m => m.team1_id === team.id || m.team2_id === team.id)
+    if (teamMatches.length === 0) return // No jugó
+    
+    let points = pointsMap.zone
+
+    const playedFinal = teamMatches.find(m => m.round_name?.toLowerCase().trim() === 'final')
+    const playedSemi = teamMatches.find(m => m.round_name?.toLowerCase().includes('semi'))
+    const playedQuarter = teamMatches.find(m => m.round_name?.toLowerCase().includes('cuartos'))
+    const playedEighths = teamMatches.find(m => m.round_name?.toLowerCase().includes('octavos'))
+
+    if (playedFinal) {
+      if (playedFinal.winner_id === team.id) {
+        points = pointsMap.winner
+      } else {
+        points = pointsMap.runnerUp
+      }
+    } else if (playedSemi) {
+      points = pointsMap.semi
+    } else if (playedQuarter) {
+      points = pointsMap.quarter
+    } else if (playedEighths) {
+      points = pointsMap.eighths
+    }
+
+    if (team.player1_id) {
+      playerPointsUpdates[team.player1_id] = (playerPointsUpdates[team.player1_id] || 0) + points
+    }
+    if (team.player2_id) {
+      playerPointsUpdates[team.player2_id] = (playerPointsUpdates[team.player2_id] || 0) + points
+    }
+  })
+
+  // Actualizar puntos de jugadores
+  const playerIds = Object.keys(playerPointsUpdates)
+  if (playerIds.length > 0) {
+    const { data: playersToUpdate } = await supabase
+      .from('players')
+      .select('id, ranking_points')
+      .in('id', playerIds)
+
+    if (playersToUpdate) {
+      for (const player of playersToUpdate) {
+        const newPoints = (player.ranking_points || 0) + playerPointsUpdates[player.id]
+        await supabase
+          .from('players')
+          .update({ ranking_points: newPoints })
+          .eq('id', player.id)
+      }
+    }
+  }
+
+  // Finalizar torneo
+  await supabase
+    .from('tournaments')
+    .update({ status: 'COMPLETED' })
+    .eq('id', tournamentId)
+
+  revalidatePath(`/dashboard/torneos/${tournamentId}`)
+  return { success: true }
+}

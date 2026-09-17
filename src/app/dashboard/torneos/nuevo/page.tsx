@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Link from 'next/link'
-import { ArrowLeft, Trophy, Calendar, Settings2, Users, Info } from 'lucide-react'
+import { ArrowLeft, Trophy, Calendar, Settings2, Users, Info, Medal } from 'lucide-react'
 import { Switch } from '@/components/ui/switch'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { ZonalSearch } from '@/components/zonal-search'
@@ -31,6 +31,13 @@ export default function NuevoTorneoPage() {
     const isZonal = formData.get('is_zonal') === 'true'
     const coHostId = formData.get('co_host_id') as string | null
 
+    const pointsWinner = parseInt(formData.get('points_winner') as string) || 100
+    const pointsRunnerUp = parseInt(formData.get('points_runner_up') as string) || 90
+    const pointsSemi = parseInt(formData.get('points_semi') as string) || 80
+    const pointsQuarter = parseInt(formData.get('points_quarter') as string) || 60
+    const pointsEighths = parseInt(formData.get('points_eighths') as string) || 40
+    const pointsZone = parseInt(formData.get('points_zone') as string) || 10
+
     const { error } = await supabase.from('tournaments').insert({
       club_id: user.id,
       name,
@@ -45,7 +52,13 @@ export default function NuevoTorneoPage() {
       status: 'OPEN',
       is_zonal: isZonal,
       co_host_id: isZonal ? coHostId : null,
-      zonal_status: isZonal && coHostId ? 'PENDING' : 'NONE'
+      zonal_status: isZonal && coHostId ? 'PENDING' : 'NONE',
+      points_winner: pointsWinner,
+      points_runner_up: pointsRunnerUp,
+      points_semi: pointsSemi,
+      points_quarter: pointsQuarter,
+      points_eighths: pointsEighths,
+      points_zone: pointsZone
     })
 
     if (error) {
@@ -216,6 +229,47 @@ export default function NuevoTorneoPage() {
               </div>
             </div>
 
+          </CardContent>
+        </Card>
+        {/* Tarjeta 3: Puntuación para Ranking */}
+        <Card className="shadow-sm">
+          <CardHeader className="pb-3 border-b">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Medal className="h-5 w-5 text-primary" />
+              Puntos para el Ranking
+            </CardTitle>
+            <CardDescription>Establece cuántos puntos ganarán los jugadores al finalizar el torneo según la ronda que alcancen.</CardDescription>
+          </CardHeader>
+          <CardContent className="p-5 grid gap-5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="points_winner" className="text-sm font-semibold text-muted-foreground">Campeones</Label>
+                <Input name="points_winner" type="number" defaultValue={100} required className="h-10 text-center font-bold" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="points_runner_up" className="text-sm font-semibold text-muted-foreground">Subcampeones</Label>
+                <Input name="points_runner_up" type="number" defaultValue={90} required className="h-10 text-center font-bold" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="points_semi" className="text-sm font-semibold text-muted-foreground">Semifinalistas</Label>
+                <Input name="points_semi" type="number" defaultValue={80} required className="h-10 text-center font-bold" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="points_quarter" className="text-sm font-semibold text-muted-foreground">Cuartos de Final</Label>
+                <Input name="points_quarter" type="number" defaultValue={60} required className="h-10 text-center font-bold" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="points_eighths" className="text-sm font-semibold text-muted-foreground">Octavos de Final</Label>
+                <Input name="points_eighths" type="number" defaultValue={40} required className="h-10 text-center font-bold" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="points_zone" className="text-sm font-semibold text-muted-foreground">Fase de Grupos (Zonas)</Label>
+                <Input name="points_zone" type="number" defaultValue={10} required className="h-10 text-center font-bold" />
+              </div>
+            </div>
+            <p className="text-[11px] text-muted-foreground bg-blue-50/50 p-2 rounded-md border border-blue-100 text-blue-800">
+              * Estos puntos se repartirán automáticamente cuando presiones "Finalizar Torneo" en el panel de control.
+            </p>
           </CardContent>
         </Card>
 

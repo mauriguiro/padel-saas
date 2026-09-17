@@ -10,7 +10,7 @@ import { BotonCabezaSerie } from './boton-cabeza-serie'
 import { BotonEliminarInscripcion } from './boton-eliminar-inscripcion'
 import { BotonEditarPareja } from './BotonEditarPareja'
 import { BotonWhatsAppPromo, BotonWhatsAppPago, BotonWhatsAppPartido } from './whatsapp-botones'
-import { generarFixture, avanzarRonda } from './actions'
+import { generarFixture, avanzarRonda, finalizarTorneo } from './actions'
 import { TorneoTabs } from './torneo-tabs'
 import { BotonVerificarPartido } from './boton-verificar-partido'
 
@@ -168,13 +168,22 @@ export default async function TorneoDetallePage({ params }: { params: { id: stri
               )}
 
               {torneo.status === 'IN_PROGRESS' && (
-                <form action={avanzarRonda} className="w-full sm:w-auto">
-                  <input type="hidden" name="tournament_id" value={torneo.id} />
-                  <button type="submit" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-md font-bold shadow-md transition-transform hover:-translate-y-0.5">
-                    <Trophy className="h-4 w-4" />
-                    Generar Siguiente Ronda
-                  </button>
-                </form>
+                <>
+                  <form action={avanzarRonda} className="w-full sm:w-auto">
+                    <input type="hidden" name="tournament_id" value={torneo.id} />
+                    <button type="submit" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-md font-bold shadow-md transition-transform hover:-translate-y-0.5">
+                      <Trophy className="h-4 w-4" />
+                      Generar Siguiente Ronda
+                    </button>
+                  </form>
+                  <form action={finalizarTorneo} className="w-full sm:w-auto">
+                    <input type="hidden" name="tournament_id" value={torneo.id} />
+                    <button type="submit" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-green-600 text-white hover:bg-green-700 px-4 py-2 rounded-md font-bold shadow-md transition-transform hover:-translate-y-0.5">
+                      <CheckCircle2 className="h-4 w-4" />
+                      Finalizar Torneo y Repartir Puntos
+                    </button>
+                  </form>
+                </>
               )}
             </div>
           </CardContent>

@@ -28,16 +28,15 @@ export function CanchasForm({ canchas }: { canchas: any[] }) {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
       {/* Formulario para añadir */}
       <div className="bg-card border rounded-xl p-6 shadow-sm h-fit">
-        <h2 className="text-xl font-bold mb-4">Añadir Nueva Cancha</h2>
         <form ref={formRef} action={handleAdd} className="flex flex-col gap-4">
           <div>
-            <label className="text-sm font-medium mb-1 block">Nombre de la Cancha</label>
+            <label className="text-sm font-medium mb-2 block text-center">Nombre de la Cancha</label>
             <input 
               name="name" 
               type="text" 
               placeholder="Ej: Cancha 1, Central, Cristal..." 
               required 
-              className="w-full border rounded-md px-3 py-2 bg-background"
+              className="w-full border rounded-md px-3 py-2 bg-background text-center"
             />
           </div>
           <button 
@@ -52,7 +51,7 @@ export function CanchasForm({ canchas }: { canchas: any[] }) {
 
       {/* Lista de Canchas */}
       <div className="bg-card border rounded-xl p-6 shadow-sm">
-        <h2 className="text-xl font-bold mb-4">Mis Canchas Registradas ({canchas.length})</h2>
+        <h2 className="text-xl font-bold mb-4 text-center">Mis Canchas Registradas ({canchas.length})</h2>
         {canchas.length === 0 ? (
           <p className="text-muted-foreground text-sm text-center py-8">No tienes canchas registradas. Añade una para empezar a usar el Planificador.</p>
         ) : (

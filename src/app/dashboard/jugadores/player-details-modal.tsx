@@ -15,10 +15,8 @@ export function PlayerDetailsModal({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <button type="button" className="text-left outline-none w-full max-w-full">
-          {children}
-        </button>
+      <DialogTrigger className="text-left outline-none w-full max-w-full">
+        {children}
       </DialogTrigger>
       
       <DialogContent className="sm:max-w-[425px]">

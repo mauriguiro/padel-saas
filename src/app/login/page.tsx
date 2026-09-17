@@ -90,7 +90,7 @@ export default function LoginPage({
                 <span className="font-bold tracking-tight flex items-center">
                   Pa<PadelRacketLetterD className="h-7 w-6 inline-block -ml-[1px] -mr-[1px] text-primary" />el SaaS
                 </span>
-                <Image src="/padel-icon.jpg" alt="Padel Logo" width={32} height={32} className="ml-2 rounded-full object-cover shadow-sm bg-white" />
+                <PadelRacketHit className="h-7 w-7 ml-1.5" />
               </div>
             )}
           </CardTitle>

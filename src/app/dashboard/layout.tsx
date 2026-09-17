@@ -137,7 +137,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
               <span className="font-bold text-xl text-primary tracking-tight flex items-center">
                 Pa<PadelRacketLetterD className="h-6 w-5 inline-block -ml-[1px] -mr-[1px] text-primary" />el SaaS
               </span>
-              <Image src="/padel-icon.jpg" alt="Padel Logo" width={28} height={28} className="ml-2 rounded-full object-cover shadow-sm bg-white" />
+              <PadelRacketHit className="h-6 w-6 ml-1.5" />
             </div>
           </div>
           <div className="flex items-center gap-4">

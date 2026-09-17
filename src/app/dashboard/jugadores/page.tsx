@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { PlusCircle, Search, Trophy, Medal, Pencil, Trash2 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
+import { PlayerDetailsModal } from './player-details-modal'
 
 export default async function JugadoresPage({ searchParams }: { searchParams: { q?: string, sort?: string, order?: string, category?: string, page?: string, gender?: string } }) {
   const supabase = createClient()
@@ -196,9 +197,11 @@ export default async function JugadoresPage({ searchParams }: { searchParams: { 
                         )}
                       </td>
                       <td className="px-2 md:px-4 py-2 sm:py-2.5">
-                        <div className="font-bold text-xs sm:text-[15px] whitespace-nowrap text-ellipsis overflow-hidden max-w-[100px] sm:max-w-none">
-                          {jugador.last_name}, <span className="md:hidden">{jugador.first_name.charAt(0)}.</span><span className="hidden md:inline">{jugador.first_name}</span>
-                        </div>
+                        <PlayerDetailsModal jugador={jugador}>
+                          <div className="font-bold text-xs sm:text-[15px] whitespace-nowrap text-ellipsis overflow-hidden max-w-[100px] sm:max-w-none hover:text-primary transition-colors hover:underline">
+                            {jugador.last_name}, <span className="md:hidden">{jugador.first_name.charAt(0)}.</span><span className="hidden md:inline">{jugador.first_name}</span>
+                          </div>
+                        </PlayerDetailsModal>
                       </td>
                       <td className="px-1 sm:px-2 md:px-4 py-2 sm:py-2.5 text-center">
                         <span className="bg-secondary text-secondary-foreground px-1 sm:px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-bold border">

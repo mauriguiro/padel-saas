@@ -59,14 +59,14 @@ export default async function TorneosPage() {
 
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="font-bold text-3xl">Mis Torneos</h1>
+          <h1 className="font-bold text-3xl whitespace-nowrap">Mis Torneos</h1>
         </div>
         <Link 
           href="/dashboard/torneos/nuevo" 
-          className="flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-md font-medium shadow-sm transition-all hover:-translate-y-0.5"
+          className="flex items-center gap-2 bg-[#6b8e23] text-white hover:bg-[#556b2f] px-4 py-2 rounded-md font-medium shadow-sm transition-all hover:-translate-y-0.5 whitespace-nowrap flex-nowrap"
         >
-          <PlusCircle className="h-5 w-5" />
-          Nuevo Torneo
+          <PlusCircle className="h-5 w-5 shrink-0" />
+          <span>Nuevo Torneo</span>
         </Link>
       </div>
 
@@ -75,9 +75,9 @@ export default async function TorneosPage() {
           {torneos.map((torneo) => (
             <Card key={torneo.id} className="hover:shadow-md transition-shadow flex flex-col">
               <CardHeader className="pb-2 border-b bg-muted/20">
-                <div className="flex justify-between items-start gap-2">
-                  <div className="flex flex-col gap-1">
-                    <CardTitle className="text-lg leading-tight line-clamp-2 uppercase">{torneo.name}</CardTitle>
+                <div className="flex justify-between items-start gap-2 overflow-hidden">
+                  <div className="flex flex-col gap-1 min-w-0">
+                    <CardTitle className="text-lg leading-tight truncate uppercase" title={torneo.name}>{torneo.name}</CardTitle>
                     {torneo.is_zonal && (
                       <span className="text-[10px] font-bold uppercase bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full w-fit">
                         Torneo Zonal

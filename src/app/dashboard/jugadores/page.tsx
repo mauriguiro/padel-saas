@@ -186,10 +186,10 @@ export default async function JugadoresPage({ searchParams }: { searchParams: { 
                       <td className="px-1 sm:px-2 md:px-4 py-2 sm:py-2.5 font-bold text-center">
                         {sortBy === 'points' && sortOrder === 'desc' ? (
                           <>
-                            {index === 0 && <span title="1er Lugar"><Medal className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500 mx-auto" /></span>}
-                            {index === 1 && <span title="2do Lugar"><Medal className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 mx-auto" /></span>}
-                            {index === 2 && <span title="3er Lugar"><Medal className="h-4 w-4 sm:h-5 sm:w-5 text-amber-700 mx-auto" /></span>}
-                            {index > 2 && <span className="text-muted-foreground">{index + 1}</span>}
+                            {from + index === 0 && <span title="1er Lugar"><Medal className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500 mx-auto" /></span>}
+                            {from + index === 1 && <span title="2do Lugar"><Medal className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 mx-auto" /></span>}
+                            {from + index === 2 && <span title="3er Lugar"><Medal className="h-4 w-4 sm:h-5 sm:w-5 text-amber-700 mx-auto" /></span>}
+                            {from + index > 2 && <span className="text-muted-foreground">{from + index + 1}</span>}
                           </>
                         ) : (
                           <span className="text-muted-foreground">-</span>

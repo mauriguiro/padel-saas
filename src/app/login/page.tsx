@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import Image from 'next/image'
 import { PadelRacketLetterD, PadelRacketHit } from '@/components/logo-icons'
 
 export default function LoginPage({
@@ -89,7 +90,7 @@ export default function LoginPage({
                 <span className="font-bold tracking-tight flex items-center">
                   Pa<PadelRacketLetterD className="h-7 w-6 inline-block -ml-[1px] -mr-[1px] text-primary" />el SaaS
                 </span>
-                <PadelRacketHit className="h-7 w-7 ml-1.5 text-primary" />
+                <Image src="/padel-icon.jpg" alt="Padel Logo" width={32} height={32} className="ml-2 rounded-full object-cover shadow-sm bg-white" />
               </div>
             )}
           </CardTitle>

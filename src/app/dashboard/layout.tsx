@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from '@/components/ui/sheet'
 import { Menu, PlusCircle, UserPlus, LogOut, Trophy, Users, ShieldAlert, LayoutDashboard, Lightbulb, Phone, Mail, ChevronDown, Calendar, Grid2X2 } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ModeToggle } from '@/components/mode-toggle'
 import { PadelRacketLetterD, PadelRacketHit } from '@/components/logo-icons'
 
@@ -136,7 +137,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
               <span className="font-bold text-xl text-primary tracking-tight flex items-center">
                 Pa<PadelRacketLetterD className="h-6 w-5 inline-block -ml-[1px] -mr-[1px] text-primary" />el SaaS
               </span>
-              <PadelRacketHit className="h-6 w-6 ml-1.5 text-primary" />
+              <Image src="/padel-icon.jpg" alt="Padel Logo" width={28} height={28} className="ml-2 rounded-full object-cover shadow-sm bg-white" />
             </div>
           </div>
           <div className="flex items-center gap-4">

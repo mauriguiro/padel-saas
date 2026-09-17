@@ -11,7 +11,19 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { ZonalSearch } from '@/components/zonal-search'
 import { PriceInput } from '@/components/price-input'
 
-export default function NuevoTorneoPage() {
+import { ScheduleConfig } from './schedule-config'
+
+export default async function NuevoTorneoPage() {
+  const outerSupabase = createClient()
+  const { data: { user } } = await outerSupabase.auth.getUser()
+  if (!user) return redirect('/login')
+
+  const { data: courts } = await outerSupabase
+    .from('courts')
+    .select('id, name')
+    .eq('club_id', user.id)
+    .order('name', { ascending: true })
+
   const crearTorneo = async (formData: FormData) => {
     'use server'
     const supabase = createClient()
@@ -20,6 +32,19 @@ export default function NuevoTorneoPage() {
 
     const name = (formData.get('name') as string)?.toUpperCase() || ''
     const startDate = formData.get('start_date') as string
+    const endDate = formData.get('end_date') as string
+    const matchDurationMinutes = parseInt(formData.get('match_duration_minutes') as string) || 90
+    
+    // Parse arrays
+    let availableCourts: string[] = []
+    let scheduleConfig: any[] = []
+    try {
+      availableCourts = JSON.parse(formData.get('available_courts') as string || '[]')
+      scheduleConfig = JSON.parse(formData.get('schedule_config') as string || '[]')
+    } catch (e) {
+      console.error(e)
+    }
+
     const category = (formData.get('category') as string)?.toUpperCase() || ''
     const gender = formData.get('gender') as string || 'Masculino'
     const price = parseInt(formData.get('price') as string) || 0
@@ -42,6 +67,10 @@ export default function NuevoTorneoPage() {
       club_id: user.id,
       name,
       start_date: startDate,
+      end_date: endDate,
+      match_duration_minutes: matchDurationMinutes,
+      available_courts: availableCourts,
+      schedule_config: scheduleConfig,
       category,
       gender,
       price_per_player: price,
@@ -94,13 +123,9 @@ export default function NuevoTorneoPage() {
           </CardHeader>
           <CardContent className="p-5 grid gap-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div className="flex flex-col gap-1.5">
+              <div className="flex flex-col gap-1.5 md:col-span-2">
                 <Label htmlFor="name" className="text-sm font-semibold text-muted-foreground">Nombre del Torneo</Label>
                 <Input name="name" required placeholder="Ej: Copa de Verano Padel Club" className="h-10 uppercase" />
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="start_date" className="text-sm font-semibold text-muted-foreground">Fecha de Inicio</Label>
-                <Input name="start_date" type="date" required className="h-10" />
               </div>
             </div>
 
@@ -157,6 +182,8 @@ export default function NuevoTorneoPage() {
             </div>
           </CardContent>
         </Card>
+
+        <ScheduleConfig courts={courts || []} />
 
         {/* Tarjeta 2: Reglas del Motor */}
         <Card className="shadow-sm">

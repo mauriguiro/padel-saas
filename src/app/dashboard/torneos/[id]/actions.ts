@@ -37,12 +37,13 @@ export async function toggleSeeded(teamId: string, isSeeded: boolean, tournament
   return { success: true }
 }
 
-export async function actualizarPareja(teamId: string, tournamentId: string, data: { time_availability?: string }) {
+export async function actualizarPareja(teamId: string, tournamentId: string, data: { time_availability?: string, availability?: any }) {
   const supabase = createClient()
   const { error } = await supabase
     .from('tournament_teams')
     .update({ 
-      time_availability: data.time_availability 
+      time_availability: data.time_availability,
+      availability: data.availability
     })
     .eq('id', teamId)
   
@@ -81,6 +82,11 @@ export async function inscribirPareja(formData: FormData) {
   const tournamentId = formData.get('tournament_id') as string
   const player1Id = formData.get('player1_id') as string
   const player2Id = formData.get('player2_id') as string
+  const availabilityStr = formData.get('availability') as string
+  let parsedAvailability = null
+  try {
+    if (availabilityStr) parsedAvailability = JSON.parse(availabilityStr)
+  } catch (e) {}
 
   if (!tournamentId || !player1Id || !player2Id) {
     return { error: 'Faltan datos' }
@@ -178,7 +184,8 @@ export async function inscribirPareja(formData: FormData) {
     .insert({
       tournament_id: tournamentId,
       player1_id: player1Id,
-      player2_id: player2Id
+      player2_id: player2Id,
+      availability: parsedAvailability
     })
 
   if (error) {

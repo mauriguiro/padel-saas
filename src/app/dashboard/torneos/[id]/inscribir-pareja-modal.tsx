@@ -94,14 +94,18 @@ function PlayerSelect({
   )
 }
 
+import { TeamAvailabilityConfig } from './team-availability-config'
+
 export function InscribirParejaModal({ 
   tournamentId, 
   jugadores,
-  inscriptosIds = []
+  inscriptosIds = [],
+  scheduleConfig = []
 }: { 
   tournamentId: string, 
   jugadores: Player[],
-  inscriptosIds?: string[]
+  inscriptosIds?: string[],
+  scheduleConfig?: any[]
 }) {
   const [open, setOpen] = useState(false)
   const [error, setError] = useState('')
@@ -170,6 +174,10 @@ export function InscribirParejaModal({
             onSelect={setPlayer2}
             disabledIds={[...inscriptosIds, player1].filter(Boolean)}
           />
+
+          <div className="mt-2 border-t pt-4">
+            <TeamAvailabilityConfig scheduleConfig={scheduleConfig} />
+          </div>
 
           {error && <p className="text-sm text-destructive font-medium">{error}</p>}
 

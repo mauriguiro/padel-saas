@@ -156,6 +156,7 @@ export default async function TorneoDetallePage({ params }: { params: { id: stri
                     tournamentId={torneo.id} 
                     jugadores={jugadores || []} 
                     inscriptosIds={Array.from(inscritosIds)}
+                    scheduleConfig={torneo.schedule_config}
                   />
                   <form action={generarFixture} className="w-full sm:w-auto">
                     <input type="hidden" name="tournament_id" value={torneo.id} />
@@ -200,7 +201,7 @@ export default async function TorneoDetallePage({ params }: { params: { id: stri
               {inscriptos && inscriptos.length > 0 ? (
                 <ul className="flex flex-col gap-4 p-4">
                   {inscriptos.map((equipo, index) => (
-                    <li key={equipo.id} className={`relative p-3 rounded-xl border shadow-sm transition-all hover:shadow-md flex flex-col gap-3 ${equipo.time_availability ? 'border-l-4 border-l-amber-400 bg-amber-50/40 dark:bg-amber-900/10' : 'bg-card'}`}>
+                    <li key={equipo.id} className={`relative p-3 rounded-xl border shadow-sm transition-all hover:shadow-md flex flex-col gap-3 ${equipo.time_availability || equipo.availability ? 'border-l-4 border-l-amber-400 bg-amber-50/40 dark:bg-amber-900/10' : 'bg-card'}`}>
                       
                       {/* Cabecera de la Tarjeta */}
                       <div className="flex items-start justify-between border-b border-border/60 pb-2">
@@ -209,9 +210,9 @@ export default async function TorneoDetallePage({ params }: { params: { id: stri
                             <span className="font-extrabold text-sm tracking-tight text-foreground">
                               Pareja {index + 1}
                             </span>
-                            {equipo.time_availability && (
+                            {(equipo.time_availability || equipo.availability) && (
                                <span className="px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200 dark:bg-amber-900 dark:text-amber-300 dark:border-amber-800 text-[9px] font-bold uppercase tracking-wider leading-none">
-                                 Con Notas
+                                 Con Restricciones
                                </span>
                             )}
                           </div>
@@ -221,6 +222,8 @@ export default async function TorneoDetallePage({ params }: { params: { id: stri
                               teamId={equipo.id} 
                               tournamentId={torneo.id} 
                               initialTimeAvailability={equipo.time_availability} 
+                              initialAvailability={equipo.availability}
+                              scheduleConfig={torneo.schedule_config}
                             />
                             {torneo.has_seeded_teams && (
                               <BotonCabezaSerie teamId={equipo.id} isSeeded={equipo.is_seeded} tournamentId={torneo.id} />

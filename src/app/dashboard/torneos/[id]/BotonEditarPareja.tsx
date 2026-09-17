@@ -40,11 +40,12 @@ export function BotonEditarPareja({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger 
-        className="text-muted-foreground hover:text-primary transition-colors p-1 rounded-md hover:bg-muted" 
+        className="px-2 py-1 rounded-md flex items-center justify-center gap-1.5 transition-colors border bg-muted/50 border-transparent text-muted-foreground hover:bg-muted/80 text-xs font-bold" 
         title="Editar Pareja (Notas, Disponibilidad)"
         type="button"
       >
-        <Settings2 className="h-4 w-4" />
+        <Settings2 className="h-3.5 w-3.5" />
+        <span>Notas</span>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

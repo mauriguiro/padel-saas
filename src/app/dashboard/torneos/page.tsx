@@ -134,15 +134,13 @@ export default async function TorneosPage() {
         </div>
       ) : null}
 
-      <div className="flex justify-between items-center mb-2 gap-4 overflow-x-auto pb-1">
-        <div>
-          <h1 className="font-bold text-3xl whitespace-nowrap">Mis Torneos</h1>
-        </div>
+      <div className="flex justify-between items-center mb-4 gap-2">
+        <h1 className="font-bold text-2xl sm:text-3xl whitespace-nowrap truncate">Mis Torneos</h1>
         <Link 
           href="/dashboard/torneos/nuevo" 
-          className="flex items-center gap-2 bg-[#6b8e23] text-white hover:bg-[#556b2f] px-4 py-2 rounded-md font-medium shadow-sm transition-all hover:-translate-y-0.5 whitespace-nowrap flex-nowrap shrink-0"
+          className="flex items-center gap-2 bg-[#6b8e23] text-white hover:bg-[#556b2f] px-3 sm:px-4 py-2 rounded-md font-medium shadow-sm transition-all hover:-translate-y-0.5 whitespace-nowrap shrink-0 text-sm sm:text-base"
         >
-          <PlusCircle className="h-5 w-5 shrink-0" />
+          <PlusCircle className="h-4 w-4 sm:h-5 sm:w-5 shrink-0" />
           <span>Nuevo Torneo</span>
         </Link>
       </div>

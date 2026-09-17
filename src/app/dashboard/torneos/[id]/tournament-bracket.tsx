@@ -30,7 +30,17 @@ function MatchCard({ partido, torneo, fapMatch }: { partido: any, torneo: any, f
     <Card className={`w-72 shadow-sm border-l-4 print:border border print:border-gray-300 print:shadow-none ${hasWinner ? 'border-l-green-500 bg-green-50/30 dark:bg-green-950/20' : 'border-l-primary'}`}>
       <CardHeader className="py-2 px-3 bg-muted/20 print:bg-gray-100 border-b">
         <CardTitle className="text-xs font-bold flex items-center justify-between">
-          {partido.round_name}
+          <div className="flex flex-col gap-0.5">
+            <span>{partido.round_name}</span>
+            {partido.court_id && torneo.schedule_config?.length > 0 && (
+              <span className="text-[10px] font-normal text-muted-foreground flex items-center gap-1">
+                <span className="bg-primary/10 text-primary px-1 rounded-sm font-semibold">
+                  Turno {partido.turn_order + 1}
+                </span>
+                • Cancha asignada
+              </span>
+            )}
+          </div>
           {hasWinner ? <CheckCircle2 className="h-3 w-3 text-green-600 print:text-black" /> : <Swords className="h-3 w-3 text-muted-foreground print:text-black" />}
         </CardTitle>
       </CardHeader>

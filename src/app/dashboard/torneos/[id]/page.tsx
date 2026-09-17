@@ -15,6 +15,7 @@ import { TorneoTabs } from './torneo-tabs'
 import { BotonVerificarPartido } from './boton-verificar-partido'
 import { BotonAvanzarRonda } from './boton-avanzar-ronda'
 import { TournamentBracket } from './tournament-bracket'
+import { FixtureView } from './fixture-view'
 import { FAP_BRACKETS } from '@/lib/fap-rules'
 
 export default async function TorneoDetallePage({ params }: { params: { id: string } }) {
@@ -298,6 +299,11 @@ export default async function TorneoDetallePage({ params }: { params: { id: stri
             </div>
           }
           FixtureView={
+            <div className="min-h-[400px] w-full bg-background rounded-xl p-2 border">
+              <FixtureView torneo={torneo} dbMatches={partidos || []} />
+            </div>
+          }
+          BracketView={
             <div className="min-h-[400px] w-full">
             {torneo.status === 'OPEN' ? (
               <Card className="h-full flex flex-col items-center justify-center bg-muted/10 border-dashed p-10">

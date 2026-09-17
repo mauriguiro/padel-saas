@@ -9,6 +9,7 @@ export function TorneoTabs({
   partidos, 
   courts,
   FixtureView,
+  BracketView,
   InscriptosView,
   isReadOnly = false
 }: { 
@@ -16,11 +17,12 @@ export function TorneoTabs({
   partidos: any[], 
   courts: any[],
   FixtureView: React.ReactNode,
+  BracketView: React.ReactNode,
   InscriptosView: React.ReactNode,
   isReadOnly?: boolean
 }) {
   // If tournament is open, default to inscriptos. Otherwise default to fixture.
-  const [activeTab, setActiveTab] = useState<'inscriptos' | 'fixture' | 'planificador'>(torneo.status === 'OPEN' ? 'inscriptos' : 'fixture')
+  const [activeTab, setActiveTab] = useState<'inscriptos' | 'fixture' | 'bracket' | 'planificador'>(torneo.status === 'OPEN' ? 'inscriptos' : 'fixture')
 
   return (
     <div className="w-full flex flex-col gap-4">
@@ -33,25 +35,34 @@ export function TorneoTabs({
           >
             Inscriptos y Pagos
           </button>
-          <button 
-            onClick={() => setActiveTab('fixture')}
-            className={`px-4 py-2 text-sm rounded-sm font-bold transition-colors whitespace-nowrap ${activeTab === 'fixture' ? 'bg-background shadow-sm text-primary' : 'text-muted-foreground hover:text-foreground'}`}
-          >
-            El Cuadro
-          </button>
           {torneo.status !== 'OPEN' && (
-            <button 
-              onClick={() => setActiveTab('planificador')}
-              className={`px-4 py-2 text-sm rounded-sm font-bold transition-colors whitespace-nowrap ${activeTab === 'planificador' ? 'bg-background shadow-sm text-primary' : 'text-muted-foreground hover:text-foreground'}`}
-            >
-              Planificador de Canchas
-            </button>
+            <>
+              <button 
+                onClick={() => setActiveTab('fixture')}
+                className={`px-4 py-2 text-sm rounded-sm font-bold transition-colors whitespace-nowrap ${activeTab === 'fixture' ? 'bg-background shadow-sm text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                Fase de Grupos
+              </button>
+              <button 
+                onClick={() => setActiveTab('bracket')}
+                className={`px-4 py-2 text-sm rounded-sm font-bold transition-colors whitespace-nowrap ${activeTab === 'bracket' ? 'bg-background shadow-sm text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                Cuadro Final (Llaves)
+              </button>
+              <button 
+                onClick={() => setActiveTab('planificador')}
+                className={`px-4 py-2 text-sm rounded-sm font-bold transition-colors whitespace-nowrap ${activeTab === 'planificador' ? 'bg-background shadow-sm text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                Planificador de Canchas
+              </button>
+            </>
           )}
         </div>
       </div>
       
       {activeTab === 'inscriptos' && InscriptosView}
       {activeTab === 'fixture' && FixtureView}
+      {activeTab === 'bracket' && BracketView}
       {activeTab === 'planificador' && (
         <PlanificadorCanchas 
           initialMatches={partidos || []} 

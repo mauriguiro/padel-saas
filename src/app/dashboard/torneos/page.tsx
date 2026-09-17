@@ -65,7 +65,7 @@ export default async function TorneosPage() {
         {lista.map((torneo) => (
           <Card key={torneo.id} className="hover:shadow-md transition-shadow flex flex-col">
             <CardHeader className="pb-2 border-b bg-muted/20">
-              <div className="flex justify-between items-start gap-2 overflow-hidden">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-2 overflow-hidden">
                 <div className="flex flex-col gap-1 min-w-0">
                   <CardTitle className="text-lg leading-tight truncate uppercase" title={torneo.name}>{torneo.name}</CardTitle>
                   {torneo.is_zonal && (
@@ -74,7 +74,7 @@ export default async function TorneosPage() {
                     </span>
                   )}
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between sm:justify-end gap-2">
                   <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary/10 text-primary whitespace-nowrap">
                     {torneo.status === 'OPEN' && 'Inscripciones Abiertas'}
                     {torneo.status === 'IN_PROGRESS' && 'En Curso'}
@@ -134,13 +134,13 @@ export default async function TorneosPage() {
         </div>
       ) : null}
 
-      <div className="flex justify-between items-center mb-2">
+      <div className="flex justify-between items-center mb-2 gap-4 overflow-x-auto pb-1">
         <div>
           <h1 className="font-bold text-3xl whitespace-nowrap">Mis Torneos</h1>
         </div>
         <Link 
           href="/dashboard/torneos/nuevo" 
-          className="flex items-center gap-2 bg-[#6b8e23] text-white hover:bg-[#556b2f] px-4 py-2 rounded-md font-medium shadow-sm transition-all hover:-translate-y-0.5 whitespace-nowrap flex-nowrap"
+          className="flex items-center gap-2 bg-[#6b8e23] text-white hover:bg-[#556b2f] px-4 py-2 rounded-md font-medium shadow-sm transition-all hover:-translate-y-0.5 whitespace-nowrap flex-nowrap shrink-0"
         >
           <PlusCircle className="h-5 w-5 shrink-0" />
           <span>Nuevo Torneo</span>

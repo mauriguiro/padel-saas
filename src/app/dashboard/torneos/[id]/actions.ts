@@ -645,3 +645,19 @@ export async function togglePago(formData: FormData) {
   revalidatePath(`/dashboard/torneos/${tournamentId}`)
   return { success: true }
 }
+
+export async function toggleVerificado(matchId: string, isVerified: boolean, tournamentId: string) {
+  const supabase = createClient()
+  const { error } = await supabase
+    .from('matches')
+    .update({ is_verified: isVerified })
+    .eq('id', matchId)
+    
+  if (error) {
+    console.error(error)
+    return { error: 'Error al actualizar estado de verificación' }
+  }
+  
+  revalidatePath(`/dashboard/torneos/${tournamentId}`)
+  return { success: true }
+}

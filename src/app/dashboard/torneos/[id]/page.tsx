@@ -12,6 +12,7 @@ import { BotonEditarPareja } from './BotonEditarPareja'
 import { BotonWhatsAppPromo, BotonWhatsAppPago, BotonWhatsAppPartido } from './whatsapp-botones'
 import { generarFixture, avanzarRonda } from './actions'
 import { TorneoTabs } from './torneo-tabs'
+import { BotonVerificarPartido } from './boton-verificar-partido'
 
 export default async function TorneoDetallePage({ params }: { params: { id: string } }) {
   const supabase = createClient()
@@ -335,6 +336,18 @@ export default async function TorneoDetallePage({ params }: { params: { id: stri
                               team2={partido.team2} 
                               isEdit={hasWinner}
                             />
+                            {hasWinner && (
+                              <BotonVerificarPartido 
+                                matchId={partido.id}
+                                tournamentId={torneo.id}
+                                torneoName={torneo.name}
+                                roundName={partido.round_name || ''}
+                                winner={partido.winner_id === partido.team1.id ? partido.team1 : partido.team2}
+                                loser={partido.winner_id === partido.team1.id ? partido.team2 : partido.team1}
+                                isVerified={partido.is_verified}
+                                setsData={partido.sets_data}
+                              />
+                            )}
                             {!hasWinner && (
                               <BotonWhatsAppPartido 
                                 torneoName={torneo.name}

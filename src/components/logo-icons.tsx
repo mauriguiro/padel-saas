@@ -23,13 +23,13 @@ export const PadelRacketHit = ({ className }: { className?: string }) => (
       <path d="M10.5 17L13.5 16M10.5 19L13.5 18M10.5 21L13.5 20" stroke="#9ca3af" strokeWidth="0.5" />
       
       {/* Bridge (Heart of the racket) */}
-      <path d="M9.5 15C9.5 15 12 11 14.5 15Z" fill="#ef4444" stroke="#dc2626" strokeWidth="0.5" />
+      <path d="M9.5 15C9.5 15 12 11 14.5 15Z" fill="#1f2937" stroke="#111827" strokeWidth="0.5" />
 
       {/* Racket Head */}
-      <path d="M12 1.5C7.5 1.5 5.5 6 5.5 10C5.5 14 9 15.5 12 15.5C15 15.5 18.5 14 18.5 10C18.5 6 16.5 1.5 12 1.5Z" fill="#1f2937" stroke="#111827" strokeWidth="0.5" />
+      <path d="M12 1.5C7.5 1.5 5.5 6 5.5 10C5.5 14 9 15.5 12 15.5C15 15.5 18.5 14 18.5 10C18.5 6 16.5 1.5 12 1.5Z" fill="#ef4444" stroke="#b91c1c" strokeWidth="0.5" />
       
       {/* Carbon fiber accent / design */}
-      <path d="M12 1.5C9 1.5 7.5 6 7.5 10C7.5 13.5 10 15.5 12 15.5Z" fill="#374151" />
+      <path d="M12 1.5C9 1.5 7.5 6 7.5 10C7.5 13.5 10 15.5 12 15.5Z" fill="#dc2626" />
       
       {/* Holes */}
       <circle cx="9" cy="6" r="0.6" fill="#000" />

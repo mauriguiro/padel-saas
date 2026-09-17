@@ -232,27 +232,22 @@ export default async function NuevoTorneoPage() {
               </Select>
             </div>
 
-            <div className="flex flex-col gap-3 p-4 border rounded-md bg-muted/20">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Label htmlFor="has_seeded_teams" className="text-sm font-semibold text-foreground cursor-pointer">Incluir Cabezas de Serie</Label>
-                  <Dialog>
-                    <DialogTrigger className="text-muted-foreground hover:text-primary transition-colors" type="button">
-                      <Info className="h-4 w-4" />
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>¿Qué son los Cabezas de Serie?</DialogTitle>
-                        <DialogDescription className="pt-3 text-sm leading-relaxed">
-                          El objetivo de los cabezas de serie es distribuir a las parejas más fuertes en diferentes zonas para que no se crucen prematuramente en la fase de grupos. 
-                          <br/><br/>
-                          Al activar esta opción, una vez creado el torneo y recibidas las inscripciones, podrás elegir cuáles son estas parejas desde el panel de control del torneo, simplemente marcándolas con una corona.
-                        </DialogDescription>
-                      </DialogHeader>
-                    </DialogContent>
-                  </Dialog>
+            <div className="flex flex-col gap-3 p-4 border-2 border-amber-200 dark:border-amber-900/50 rounded-xl bg-amber-50/50 dark:bg-amber-950/20 shadow-sm transition-all hover:border-amber-300">
+              <div className="flex items-start justify-between">
+                <div className="flex flex-col gap-1.5 pr-4">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">⭐️</span>
+                    <Label htmlFor="has_seeded_teams" className="text-base font-bold text-amber-900 dark:text-amber-500 cursor-pointer">
+                      Permitir Cabezas de Serie
+                    </Label>
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed pl-7">
+                    Activa esta opción para poder marcar a las parejas favoritas. El sistema armará el cuadro separándolas automáticamente para evitar que se eliminen en las primeras rondas.
+                  </p>
                 </div>
-                <Switch id="has_seeded_teams" name="has_seeded_teams" value="on" />
+                <div className="pt-2 shrink-0">
+                  <Switch id="has_seeded_teams" name="has_seeded_teams" value="on" className="data-[state=checked]:bg-amber-500" />
+                </div>
               </div>
             </div>
 

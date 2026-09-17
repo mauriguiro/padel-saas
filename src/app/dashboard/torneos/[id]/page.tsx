@@ -206,65 +206,82 @@ export default async function TorneoDetallePage({ params }: { params: { id: stri
                   {inscriptos.map((equipo, index) => {
                     const hasRestriction = Boolean(equipo.time_availability) || (Array.isArray(equipo.availability) && equipo.availability.some((a: any) => a.status && a.status !== 'ALL_DAY' && a.status !== 'TODO_EL_DIA'));
                     return (
-                    <li key={equipo.id} className={`relative p-4 rounded-xl border-2 shadow-sm transition-all hover:shadow-md flex flex-col gap-4 ${hasRestriction ? 'border-amber-400 bg-amber-50/40 dark:bg-amber-900/10' : 'border-border hover:border-primary/40 bg-card'}`}>
-                      
-                      {/* Cabecera de la Tarjeta */}
-                      <div className="flex items-start justify-between border-b pb-3">
-                        <div className="flex flex-col gap-1.5">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-extrabold text-base tracking-tight text-foreground bg-primary/10 text-primary px-2 py-0.5 rounded-md">
+                    <li key={equipo.id} className={`relative rounded-lg border shadow-sm transition-all hover:shadow-md bg-card ${hasRestriction ? 'border-amber-400 bg-amber-50/20 dark:bg-amber-900/10' : 'border-border hover:border-primary/30'}`}>
+                      <details className="group [&_summary::-webkit-details-marker]:hidden">
+                        <summary className="flex items-center justify-between p-3 cursor-pointer list-none outline-none select-none">
+                          <div className="flex items-center gap-2 truncate pr-2">
+                            <span className="font-extrabold text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded shadow-sm shrink-0">
                               Pareja {index + 1}
                             </span>
+                            <span className="font-semibold text-sm truncate">
+                              {equipo.player1?.last_name} / {equipo.player2?.last_name || 'A designar'}
+                            </span>
                             {hasRestriction && (
-                               <span className="px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 border border-amber-200 dark:bg-amber-900/50 dark:text-amber-300 dark:border-amber-800/50 text-[10px] font-bold uppercase tracking-wider leading-none flex items-center gap-1">
-                                 ⏱️ Restringido
+                               <span className="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200 dark:bg-amber-900/50 dark:text-amber-300 dark:border-amber-800/50 text-[10px] font-bold uppercase tracking-wider shrink-0 shadow-sm" title="Con restricciones horarias">
+                                 ⏱️
                                </span>
                             )}
                           </div>
                           
-                          <div className="flex items-center gap-1.5 flex-wrap mt-1">
-                            <BotonEditarPareja 
-                              teamId={equipo.id} 
-                              tournamentId={torneo.id} 
-                              initialTimeAvailability={equipo.time_availability} 
-                              initialAvailability={equipo.availability}
-                              scheduleConfig={torneo.schedule_config}
-                            />
-                            {torneo.has_seeded_teams && (
-                              <BotonCabezaSerie teamId={equipo.id} isSeeded={equipo.is_seeded} tournamentId={torneo.id} />
+                          <div className="flex items-center gap-3 shrink-0">
+                            {/* Indicador de pago */}
+                            {equipo.has_paid_p1 && (!equipo.player2 || equipo.has_paid_p2) ? (
+                              <div className="flex items-center gap-1 bg-green-100 text-green-700 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase border border-green-200">
+                                <span className="h-1.5 w-1.5 rounded-full bg-green-500"></span> Pagos
+                              </div>
+                            ) : (
+                              <div className="flex items-center gap-1 bg-red-100 text-red-700 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase border border-red-200">
+                                <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse"></span> Deuda
+                              </div>
+                            )}
+                            <svg className="h-4 w-4 text-muted-foreground transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+                          </div>
+                        </summary>
+                        
+                        <div className="px-3 pb-3 flex flex-col gap-3">
+                          <div className="w-full h-px bg-border/60"></div>
+                          
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <BotonEditarPareja 
+                                teamId={equipo.id} 
+                                tournamentId={torneo.id} 
+                                initialTimeAvailability={equipo.time_availability} 
+                                initialAvailability={equipo.availability}
+                                scheduleConfig={torneo.schedule_config}
+                              />
+                              {torneo.has_seeded_teams && (
+                                <BotonCabezaSerie teamId={equipo.id} isSeeded={equipo.is_seeded} tournamentId={torneo.id} />
+                              )}
+                            </div>
+                            {torneo.status === 'OPEN' && (
+                              <BotonEliminarInscripcion teamId={equipo.id} tournamentId={torneo.id} />
                             )}
                           </div>
-                        </div>
-
-                        <div className="flex flex-col items-end gap-1.5 shrink-0">
-                          {torneo.status === 'OPEN' && (
-                            <BotonEliminarInscripcion teamId={equipo.id} tournamentId={torneo.id} />
-                          )}
-                        </div>
-                      </div>
-                      
-                      {/* Lista de Jugadores */}
-                      <div className="flex flex-col gap-2">
-                        <div className="flex items-center justify-between bg-background px-3 py-2.5 rounded-lg border shadow-sm group hover:border-primary/20 transition-colors">
-                          <span className="text-sm font-bold">{equipo.player1?.first_name} {equipo.player1?.last_name}</span>
-                          <div className="flex items-center gap-1.5 shrink-0">
-                            {!equipo.has_paid_p1 && <BotonWhatsAppPago playerName={equipo.player1?.first_name} phone={equipo.player1?.phone} torneoName={torneo.name} />}
-                            <BotonPago teamId={equipo.id} playerNum={1} hasPaid={equipo.has_paid_p1} tournamentId={torneo.id} />
+                          
+                          <div className="flex flex-col gap-1.5">
+                            <div className="flex items-center justify-between bg-muted/20 px-2.5 py-1.5 rounded-md border text-sm transition-colors hover:bg-muted/40 hover:border-primary/20">
+                              <span className="font-semibold text-xs truncate">{equipo.player1?.first_name} {equipo.player1?.last_name}</span>
+                              <div className="flex items-center gap-1.5 shrink-0">
+                                {!equipo.has_paid_p1 && <BotonWhatsAppPago playerName={equipo.player1?.first_name} phone={equipo.player1?.phone} torneoName={torneo.name} />}
+                                <BotonPago teamId={equipo.id} playerNum={1} hasPaid={equipo.has_paid_p1} tournamentId={torneo.id} />
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-center justify-between bg-muted/20 px-2.5 py-1.5 rounded-md border text-sm transition-colors hover:bg-muted/40 hover:border-primary/20">
+                              <span className={`font-semibold text-xs truncate ${!equipo.player2 ? 'text-muted-foreground italic' : ''}`}>
+                                {equipo.player2 ? `${equipo.player2.first_name} ${equipo.player2.last_name}` : 'A designar'}
+                              </span>
+                              {equipo.player2 && (
+                                <div className="flex items-center gap-1.5 shrink-0">
+                                  {!equipo.has_paid_p2 && <BotonWhatsAppPago playerName={equipo.player2?.first_name} phone={equipo.player2?.phone} torneoName={torneo.name} />}
+                                  <BotonPago teamId={equipo.id} playerNum={2} hasPaid={equipo.has_paid_p2} tournamentId={torneo.id} />
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
-                        
-                        <div className="flex items-center justify-between bg-background px-3 py-2.5 rounded-lg border shadow-sm group hover:border-primary/20 transition-colors">
-                          <span className={`text-sm font-bold ${!equipo.player2 ? 'text-muted-foreground italic' : ''}`}>
-                            {equipo.player2 ? `${equipo.player2.first_name} ${equipo.player2.last_name}` : 'A designar'}
-                          </span>
-                          {equipo.player2 && (
-                            <div className="flex items-center gap-1.5 shrink-0">
-                              {!equipo.has_paid_p2 && <BotonWhatsAppPago playerName={equipo.player2?.first_name} phone={equipo.player2?.phone} torneoName={torneo.name} />}
-                              <BotonPago teamId={equipo.id} playerNum={2} hasPaid={equipo.has_paid_p2} tournamentId={torneo.id} />
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                      </details>
                     </li>
                     );
                   })}

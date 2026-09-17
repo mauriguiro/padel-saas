@@ -88,6 +88,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
                           Crear Torneo
                         </Link>
                       </SheetClose>
+                      <SheetClose asChild>
+                        <Link href="/dashboard/torneos/historial" className="flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md text-sm font-medium transition-colors text-muted-foreground hover:text-foreground">
+                          Historial
+                        </Link>
+                      </SheetClose>
                     </div>
                   </details>
 

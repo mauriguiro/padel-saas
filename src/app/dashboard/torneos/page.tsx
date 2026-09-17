@@ -147,18 +147,7 @@ export default async function TorneosPage() {
         </Link>
       </div>
 
-      <Tabs defaultValue="activos" className="w-full">
-        <TabsList className="grid grid-cols-2 w-full max-w-sm mb-2">
-          <TabsTrigger value="activos">Activos ({torneosActivos.length})</TabsTrigger>
-          <TabsTrigger value="historial">Historial ({torneosHistorial.length})</TabsTrigger>
-        </TabsList>
-        <TabsContent value="activos">
-          {renderTorneos(torneosActivos, "No hay torneos activos")}
-        </TabsContent>
-        <TabsContent value="historial">
-          {renderTorneos(torneosHistorial, "No hay torneos en el historial")}
-        </TabsContent>
-      </Tabs>
+      {renderTorneos(torneosActivos, "No hay torneos activos")}
     </div>
   )
 }

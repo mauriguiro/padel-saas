@@ -14,6 +14,8 @@ import { generarFixture, finalizarTorneo } from './actions'
 import { TorneoTabs } from './torneo-tabs'
 import { BotonVerificarPartido } from './boton-verificar-partido'
 import { BotonAvanzarRonda } from './boton-avanzar-ronda'
+import { TournamentBracket } from './tournament-bracket'
+import { FAP_BRACKETS } from '@/lib/fap-rules'
 
 export default async function TorneoDetallePage({ params }: { params: { id: string } }) {
   const supabase = createClient()
@@ -292,98 +294,7 @@ export default async function TorneoDetallePage({ params }: { params: { id: stri
                 </p>
               </Card>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {partidos?.map((partido) => {
-                  const hasWinner = !!partido.winner_id;
-                  
-                  return (
-                    <Card key={partido.id} className={`shadow-sm border-l-4 ${hasWinner ? 'border-l-green-500 bg-green-50/30' : 'border-l-primary'}`}>
-                      <CardHeader className="py-2 px-3 bg-muted/20 border-b">
-                        <CardTitle className="text-xs font-bold flex items-center justify-between">
-                          {partido.round_name}
-                          {hasWinner ? <CheckCircle2 className="h-3 w-3 text-green-600" /> : <Swords className="h-3 w-3 text-muted-foreground" />}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="p-3 flex flex-col gap-1.5">
-                        
-                        {/* Equipo 1 */}
-                        <div className="flex justify-between items-center">
-                          <span className={`font-semibold text-sm flex items-center gap-2 ${hasWinner && partido.winner_id !== partido.team1?.id ? 'text-muted-foreground line-through' : ''}`}>
-                            {partido.team1 ? `${partido.team1.player1.last_name} / ${partido.team1.player2?.last_name || ''}` : '---'}
-                            {hasWinner && partido.winner_id === partido.team1?.id && <Check className="h-3 w-3 text-green-600" />}
-                          </span>
-                          
-                          {/* Puntajes Equipo 1 */}
-                          {hasWinner && partido.sets_data && (
-                            <div className="flex gap-2 text-sm">
-                              {partido.sets_data.map((s: any, i: number) => (
-                                <span key={i} className={`font-bold w-4 text-center ${s.t1 > s.t2 ? 'text-foreground' : 'text-muted-foreground'}`}>{s.t1}</span>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                        
-                        <div className="w-full h-px bg-border my-0.5"></div>
-                        
-                        {/* Equipo 2 */}
-                        <div className="flex justify-between items-center">
-                          <span className={`font-semibold text-sm flex items-center gap-2 ${hasWinner && partido.winner_id !== partido.team2?.id ? 'text-muted-foreground line-through' : ''}`}>
-                            {partido.team2 ? `${partido.team2.player1.last_name} / ${partido.team2.player2?.last_name || ''}` : 'Pasa Directo (BYE)'}
-                            {hasWinner && partido.winner_id === partido.team2?.id && <Check className="h-3 w-3 text-green-600" />}
-                          </span>
-
-                          {/* Puntajes Equipo 2 */}
-                          {hasWinner && partido.sets_data && (
-                            <div className="flex gap-2 text-sm">
-                              {partido.sets_data.map((s: any, i: number) => (
-                                <span key={i} className={`font-bold w-4 text-center ${s.t2 > s.t1 ? 'text-foreground' : 'text-muted-foreground'}`}>{s.t2}</span>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Botón / Estado */}
-                        {partido.team1 && partido.team2 && (
-                          <div className="flex gap-2 w-full mt-1.5">
-                            <CargarResultadoModal 
-                              matchId={partido.id} 
-                              tournamentId={torneo.id}
-                              team1={partido.team1} 
-                              team2={partido.team2} 
-                              isEdit={hasWinner}
-                            />
-                            {hasWinner && (
-                              <BotonVerificarPartido 
-                                matchId={partido.id}
-                                tournamentId={torneo.id}
-                                torneoName={torneo.name}
-                                roundName={partido.round_name || ''}
-                                winner={partido.winner_id === partido.team1.id ? partido.team1 : partido.team2}
-                                loser={partido.winner_id === partido.team1.id ? partido.team2 : partido.team1}
-                                isVerified={partido.is_verified}
-                                setsData={partido.sets_data}
-                              />
-                            )}
-                            {!hasWinner && (
-                              <BotonWhatsAppPartido 
-                                torneoName={torneo.name}
-                                roundName={partido.round_name}
-                                team1={partido.team1}
-                                team2={partido.team2}
-                              />
-                            )}
-                          </div>
-                        )}
-                        {!hasWinner && (!partido.team1 || !partido.team2) && (
-                          <p className="mt-1 text-[10px] text-center text-muted-foreground italic">
-                            Clasificación Automática
-                          </p>
-                        )}
-                      </CardContent>
-                    </Card>
-                  )
-                })}
-              </div>
+              <TournamentBracket torneo={torneo} dbMatches={partidos || []} fapConfig={FAP_BRACKETS[inscriptos?.length || 6] || FAP_BRACKETS[6]} />
             )}
           </div>
           }

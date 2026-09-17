@@ -223,7 +223,7 @@ export default async function NuevoTorneoPage() {
 
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="scoring_format" className="text-sm font-semibold text-foreground">Formato de Partido</Label>
-              <Select name="scoring_format" defaultValue="TRES_SETS">
+              <Select name="scoring_format" defaultValue="2_SETS_Y_SUPER_TIEBREAK">
                 <SelectTrigger className="h-10"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="2_SETS_Y_SUPER_TIEBREAK">Al mejor de 2 Sets + Súper Tie Break a 10</SelectItem>

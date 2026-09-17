@@ -9,48 +9,50 @@ export function TorneoTabs({
   partidos, 
   courts,
   FixtureView,
+  InscriptosView,
   isReadOnly = false
 }: { 
   torneo: any, 
   partidos: any[], 
   courts: any[],
   FixtureView: React.ReactNode,
+  InscriptosView: React.ReactNode,
   isReadOnly?: boolean
 }) {
-  const [activeTab, setActiveTab] = useState<'fixture' | 'planificador'>('fixture')
+  // If tournament is open, default to inscriptos. Otherwise default to fixture.
+  const [activeTab, setActiveTab] = useState<'inscriptos' | 'fixture' | 'planificador'>(torneo.status === 'OPEN' ? 'inscriptos' : 'fixture')
 
   return (
-    <div className="lg:col-span-2 flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold flex items-center gap-2">
-          {activeTab === 'fixture' ? (
-            <><Trophy className="h-5 w-5 text-primary" /> Cuadro de Partidos</>
-          ) : (
-            <><Calendar className="h-5 w-5 text-primary" /> Planificador de Canchas</>
-          )}
-        </h2>
+    <div className="w-full flex flex-col gap-4">
+      <div className="flex items-center justify-between border-b pb-2 flex-wrap gap-4">
         
-        {torneo.status !== 'OPEN' && (
-          <div className="flex bg-muted/50 p-1 rounded-md border">
-            <button 
-              onClick={() => setActiveTab('fixture')}
-              className={`px-3 py-1.5 text-sm rounded-sm font-medium transition-colors ${activeTab === 'fixture' ? 'bg-background shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
-            >
-              Resultados
-            </button>
+        <div className="flex bg-muted/50 p-1 rounded-md border overflow-x-auto no-scrollbar max-w-full">
+          <button 
+            onClick={() => setActiveTab('inscriptos')}
+            className={`px-4 py-2 text-sm rounded-sm font-bold transition-colors whitespace-nowrap ${activeTab === 'inscriptos' ? 'bg-background shadow-sm text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+          >
+            Inscriptos y Pagos
+          </button>
+          <button 
+            onClick={() => setActiveTab('fixture')}
+            className={`px-4 py-2 text-sm rounded-sm font-bold transition-colors whitespace-nowrap ${activeTab === 'fixture' ? 'bg-background shadow-sm text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+          >
+            El Cuadro
+          </button>
+          {torneo.status !== 'OPEN' && (
             <button 
               onClick={() => setActiveTab('planificador')}
-              className={`px-3 py-1.5 text-sm rounded-sm font-medium transition-colors ${activeTab === 'planificador' ? 'bg-background shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+              className={`px-4 py-2 text-sm rounded-sm font-bold transition-colors whitespace-nowrap ${activeTab === 'planificador' ? 'bg-background shadow-sm text-primary' : 'text-muted-foreground hover:text-foreground'}`}
             >
-              Planificador
+              Planificador de Canchas
             </button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
       
-      {activeTab === 'fixture' ? (
-        FixtureView
-      ) : (
+      {activeTab === 'inscriptos' && InscriptosView}
+      {activeTab === 'fixture' && FixtureView}
+      {activeTab === 'planificador' && (
         <PlanificadorCanchas 
           initialMatches={partidos || []} 
           courts={courts || []} 

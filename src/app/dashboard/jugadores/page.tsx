@@ -198,8 +198,8 @@ export default async function JugadoresPage({ searchParams }: { searchParams: { 
                       </td>
                       <td className="px-2 md:px-4 py-2 sm:py-2.5">
                         <PlayerDetailsModal jugador={jugador}>
-                          <div className="font-bold text-xs sm:text-[15px] whitespace-nowrap text-ellipsis overflow-hidden max-w-[100px] sm:max-w-none hover:text-primary transition-colors hover:underline">
-                            {jugador.last_name}, <span className="md:hidden">{jugador.first_name.charAt(0)}.</span><span className="hidden md:inline">{jugador.first_name}</span>
+                          <div className="inline-flex items-center gap-2 font-bold text-xs sm:text-[15px] whitespace-nowrap text-ellipsis overflow-hidden max-w-[120px] sm:max-w-none bg-background hover:bg-muted border px-2.5 py-1.5 rounded-md shadow-sm transition-all active:scale-95 text-foreground hover:text-primary cursor-pointer">
+                            <span>{jugador.last_name}, <span className="md:hidden">{jugador.first_name.charAt(0)}.</span><span className="hidden md:inline">{jugador.first_name}</span></span>
                           </div>
                         </PlayerDetailsModal>
                       </td>

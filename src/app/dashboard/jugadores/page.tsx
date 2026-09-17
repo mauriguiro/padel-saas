@@ -58,7 +58,6 @@ export default async function JugadoresPage({ searchParams }: { searchParams: { 
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-muted/30 p-5 rounded-lg border shadow-sm">
         <div>
           <h1 className="font-bold text-3xl">Jugadores</h1>
-          <p className="text-muted-foreground mt-1 text-sm">Gestiona los perfiles y el Ranking de tu club.</p>
         </div>
         <Link 
           href="/dashboard/jugadores/nuevo" 
@@ -129,27 +128,25 @@ export default async function JugadoresPage({ searchParams }: { searchParams: { 
             </Link>
           )}
         </form>
-      </div>
-
-      {/* Botones de filtro por sexo con efecto 3D */}
-      <div className="flex flex-wrap gap-2 mb-2">
+      </div>      {/* Botones de filtro por sexo con efecto 3D */}
+      <div className="grid grid-cols-3 gap-1.5 md:gap-2 mb-2 w-full">
         <Link 
           href={`/dashboard/jugadores?q=${searchQuery}&sort=${sortBy}&order=${sortOrder}&category=${categoryFilter}`}
-          className={`px-6 py-2.5 text-sm font-black tracking-wide rounded-full border-2 transition-all active:border-b-2 active:translate-y-[2px] ${!genderFilter ? 'bg-primary text-primary-foreground border-primary border-b-[4px] hover:brightness-110 shadow-sm' : 'bg-background text-muted-foreground border-muted-foreground/20 border-b-[4px] hover:bg-muted hover:border-muted-foreground/40'}`}
+          className={`flex items-center justify-center text-center px-1 md:px-6 py-2.5 text-[11px] sm:text-xs md:text-sm font-black tracking-tighter md:tracking-wide rounded-full border-2 transition-all active:border-b-2 active:translate-y-[2px] ${!genderFilter ? 'bg-primary text-primary-foreground border-primary border-b-[4px] hover:brightness-110 shadow-sm' : 'bg-background text-muted-foreground border-muted-foreground/20 border-b-[4px] hover:bg-muted hover:border-muted-foreground/40'}`}
         >
           Todos
         </Link>
         <Link 
           href={`/dashboard/jugadores?q=${searchQuery}&sort=${sortBy}&order=${sortOrder}&category=${categoryFilter}&gender=Masculino`}
-          className={`px-6 py-2.5 text-sm font-black tracking-wide rounded-full border-2 transition-all active:border-b-2 active:translate-y-[2px] ${genderFilter === 'Masculino' ? 'bg-blue-600 text-white border-blue-700 border-b-[4px] hover:brightness-110 shadow-sm' : 'bg-background text-muted-foreground border-muted-foreground/20 border-b-[4px] hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300 dark:hover:bg-blue-950 dark:hover:text-blue-400'}`}
+          className={`flex items-center justify-center text-center px-1 md:px-6 py-2.5 text-[11px] sm:text-xs md:text-sm font-black tracking-tighter md:tracking-wide rounded-full border-2 transition-all active:border-b-2 active:translate-y-[2px] ${genderFilter === 'Masculino' ? 'bg-blue-600 text-white border-blue-700 border-b-[4px] hover:brightness-110 shadow-sm' : 'bg-background text-muted-foreground border-muted-foreground/20 border-b-[4px] hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300 dark:hover:bg-blue-950 dark:hover:text-blue-400'}`}
         >
           Masculinos
         </Link>
         <Link 
           href={`/dashboard/jugadores?q=${searchQuery}&sort=${sortBy}&order=${sortOrder}&category=${categoryFilter}&gender=Femenino`}
-          className={`px-6 py-2.5 text-sm font-black tracking-wide rounded-full border-2 transition-all active:border-b-2 active:translate-y-[2px] ${genderFilter === 'Femenino' ? 'bg-pink-600 text-white border-pink-700 border-b-[4px] hover:brightness-110 shadow-sm' : 'bg-background text-muted-foreground border-muted-foreground/20 border-b-[4px] hover:bg-pink-50 hover:text-pink-600 hover:border-pink-300 dark:hover:bg-pink-950 dark:hover:text-pink-400'}`}
+          className={`flex items-center justify-center text-center px-1 md:px-6 py-2.5 text-[11px] sm:text-xs md:text-sm font-black tracking-tighter md:tracking-wide rounded-full border-2 transition-all active:border-b-2 active:translate-y-[2px] ${genderFilter === 'Femenino' ? 'bg-pink-600 text-white border-pink-700 border-b-[4px] hover:brightness-110 shadow-sm' : 'bg-background text-muted-foreground border-muted-foreground/20 border-b-[4px] hover:bg-pink-50 hover:text-pink-600 hover:border-pink-300 dark:hover:bg-pink-950 dark:hover:text-pink-400'}`}
         >
-          Femeninas
+          Femeninos
         </Link>
       </div>
 
@@ -158,63 +155,66 @@ export default async function JugadoresPage({ searchParams }: { searchParams: { 
         <CardContent className="p-0">
           {jugadores && jugadores.length > 0 ? (
             <div className="overflow-x-auto">
-              <table className="w-full text-sm text-left">
+              <table className="w-full text-xs sm:text-sm text-left">
                 <thead className="bg-muted/50 text-muted-foreground border-b">
                   <tr>
-                    <th className="px-4 py-3 font-semibold text-center w-16">
-                      <Link href={`?q=${searchQuery}&sort=points&order=${sortBy === 'points' && sortOrder === 'desc' ? 'asc' : 'desc'}${categoryFilter ? `&category=${categoryFilter}` : ''}${genderFilter ? `&gender=${genderFilter}` : ''}`} className="hover:text-primary hover:underline">
+                    <th className="px-1 sm:px-2 md:px-4 py-3 font-semibold text-center w-10 sm:w-16">
+                      <Link href={`?q=${searchQuery}&sort=points&order=${sortBy === 'points' && sortOrder === 'desc' ? 'asc' : 'desc'}${categoryFilter ? `&category=${categoryFilter}` : ''}${genderFilter ? `&gender=${genderFilter}` : ''}`} className="hover:text-primary hover:underline whitespace-nowrap">
                         Rank {sortBy === 'points' && (sortOrder === 'desc' ? '↓' : '↑')}
                       </Link>
                     </th>
-                    <th className="px-4 py-3 font-semibold">
-                      <Link href={`?q=${searchQuery}&sort=name&order=${sortBy === 'name' && sortOrder === 'asc' ? 'desc' : 'asc'}${categoryFilter ? `&category=${categoryFilter}` : ''}${genderFilter ? `&gender=${genderFilter}` : ''}`} className="hover:text-primary hover:underline">
+                    <th className="px-2 md:px-4 py-3 font-semibold">
+                      <Link href={`?q=${searchQuery}&sort=name&order=${sortBy === 'name' && sortOrder === 'asc' ? 'desc' : 'asc'}${categoryFilter ? `&category=${categoryFilter}` : ''}${genderFilter ? `&gender=${genderFilter}` : ''}`} className="hover:text-primary hover:underline whitespace-nowrap">
                         Nombre {sortBy === 'name' && (sortOrder === 'asc' ? '↑' : '↓')}
                       </Link>
                     </th>
-                    <th className="px-4 py-3 font-semibold text-center">
-                      <Link href={`?q=${searchQuery}&sort=category&order=${sortBy === 'category' && sortOrder === 'asc' ? 'desc' : 'asc'}${categoryFilter ? `&category=${categoryFilter}` : ''}${genderFilter ? `&gender=${genderFilter}` : ''}`} className="hover:text-primary hover:underline">
-                        Categoría {sortBy === 'category' && (sortOrder === 'asc' ? '↑' : '↓')}
+                    <th className="px-1 sm:px-2 md:px-4 py-3 font-semibold text-center">
+                      <Link href={`?q=${searchQuery}&sort=category&order=${sortBy === 'category' && sortOrder === 'asc' ? 'desc' : 'asc'}${categoryFilter ? `&category=${categoryFilter}` : ''}${genderFilter ? `&gender=${genderFilter}` : ''}`} className="hover:text-primary hover:underline whitespace-nowrap">
+                        <span className="md:hidden">Cat.</span>
+                        <span className="hidden md:inline">Categoría</span> {sortBy === 'category' && (sortOrder === 'asc' ? '↑' : '↓')}
                       </Link>
                     </th>
-                    <th className="px-4 py-3 font-semibold text-center">Puntos</th>
-                    <th className="px-4 py-3 font-semibold">Teléfono</th>
-                    <th className="px-4 py-3 font-semibold">DNI</th>
-                    <th className="px-4 py-3 font-semibold text-right">Acciones</th>
+                    <th className="px-1 sm:px-2 md:px-4 py-3 font-semibold text-center">Pts</th>
+                    <th className="hidden sm:table-cell px-2 md:px-4 py-3 font-semibold">Teléfono</th>
+                    <th className="hidden lg:table-cell px-4 py-3 font-semibold">DNI</th>
+                    <th className="px-1 sm:px-2 md:px-4 py-3 font-semibold text-right">Acciones</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y">
                   {jugadores.map((jugador, index) => (
                     <tr key={jugador.id} className="hover:bg-muted/20 transition-colors">
-                      <td className="px-4 py-2.5 font-bold text-center">
+                      <td className="px-1 sm:px-2 md:px-4 py-2 sm:py-2.5 font-bold text-center">
                         {sortBy === 'points' && sortOrder === 'desc' ? (
                           <>
-                            {index === 0 && <span title="1er Lugar"><Medal className="h-5 w-5 text-yellow-500 mx-auto" /></span>}
-                            {index === 1 && <span title="2do Lugar"><Medal className="h-5 w-5 text-gray-400 mx-auto" /></span>}
-                            {index === 2 && <span title="3er Lugar"><Medal className="h-5 w-5 text-amber-700 mx-auto" /></span>}
+                            {index === 0 && <span title="1er Lugar"><Medal className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500 mx-auto" /></span>}
+                            {index === 1 && <span title="2do Lugar"><Medal className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 mx-auto" /></span>}
+                            {index === 2 && <span title="3er Lugar"><Medal className="h-4 w-4 sm:h-5 sm:w-5 text-amber-700 mx-auto" /></span>}
                             {index > 2 && <span className="text-muted-foreground">{index + 1}</span>}
                           </>
                         ) : (
                           <span className="text-muted-foreground">-</span>
                         )}
                       </td>
-                      <td className="px-4 py-2.5">
-                        <div className="font-bold text-[15px]">{jugador.last_name}, {jugador.first_name}</div>
+                      <td className="px-2 md:px-4 py-2 sm:py-2.5">
+                        <div className="font-bold text-xs sm:text-[15px] whitespace-nowrap text-ellipsis overflow-hidden max-w-[100px] sm:max-w-none">
+                          {jugador.last_name}, <span className="md:hidden">{jugador.first_name.charAt(0)}.</span><span className="hidden md:inline">{jugador.first_name}</span>
+                        </div>
                       </td>
-                      <td className="px-4 py-2.5 text-center">
-                        <span className="bg-secondary text-secondary-foreground px-2 py-0.5 rounded-md text-[11px] font-bold border">
+                      <td className="px-1 sm:px-2 md:px-4 py-2 sm:py-2.5 text-center">
+                        <span className="bg-secondary text-secondary-foreground px-1 sm:px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-bold border">
                           {jugador.category}
                         </span>
                       </td>
-                      <td className="px-4 py-2.5 text-center font-bold text-primary text-base">
+                      <td className="px-1 sm:px-2 md:px-4 py-2 sm:py-2.5 text-center font-bold text-primary text-sm sm:text-base">
                         {jugador.points || 0}
                       </td>
-                      <td className="px-4 py-2.5 text-muted-foreground text-sm">
+                      <td className="hidden sm:table-cell px-2 md:px-4 py-2 sm:py-2.5 text-muted-foreground text-xs sm:text-sm">
                         {jugador.phone || '-'}
                       </td>
-                      <td className="px-4 py-2.5 text-muted-foreground text-sm">
+                      <td className="hidden lg:table-cell px-4 py-2.5 text-muted-foreground text-sm">
                         {jugador.dni || '-'}
                       </td>
-                      <td className="px-4 py-2.5 text-right flex justify-end gap-1.5">
+                      <td className="px-1 sm:px-2 md:px-4 py-2 sm:py-2.5 text-right flex justify-end gap-1 sm:gap-1.5">
                         <Link 
                           href={`/dashboard/jugadores/${jugador.id}/editar`}
                           className="flex items-center gap-1.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 hover:brightness-110 px-2.5 py-1.5 rounded-md transition-all active:scale-95 shadow-sm"
@@ -263,9 +263,9 @@ export default async function JugadoresPage({ searchParams }: { searchParams: { 
       
       {/* Controles de Paginación */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between bg-muted/20 p-4 rounded-lg border">
-          <p className="text-sm text-muted-foreground">
-            Mostrando página {page} de {totalPages} ({count} jugadores en total)
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-muted/20 p-4 rounded-lg border">
+          <p className="text-sm text-muted-foreground text-center sm:text-left">
+            Mostrando <strong>{count === 0 ? 0 : from + 1}</strong> al <strong>{Math.min(to + 1, count || 0)}</strong> de <strong>{count}</strong> jugadores
           </p>
           <div className="flex gap-2">
             {page > 1 && (

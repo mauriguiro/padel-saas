@@ -5,7 +5,6 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Clock, MapPin, CalendarDays } from 'lucide-react'
-import { Checkbox } from '@/components/ui/checkbox'
 
 type Court = {
   id: string
@@ -213,9 +212,11 @@ export function ScheduleConfig({ courts }: { courts: Court[] }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
               {courts.map(court => (
                 <label key={court.id} className={`flex items-center gap-3 p-3 border rounded-md cursor-pointer transition-colors hover:bg-muted/50 ${selectedCourts.includes(court.id) ? 'border-primary bg-primary/5' : ''}`}>
-                  <Checkbox 
+                  <input 
+                    type="checkbox"
                     checked={selectedCourts.includes(court.id)}
-                    onCheckedChange={() => toggleCourt(court.id)}
+                    onChange={() => toggleCourt(court.id)}
+                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                   />
                   <span className="text-sm font-medium">{court.name}</span>
                 </label>

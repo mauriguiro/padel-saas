@@ -97,9 +97,9 @@ export function TeamAvailabilityConfig({
           if (!dayAv) return null
 
           return (
-            <div key={day.date} className="flex flex-col gap-2 p-3 border rounded-md bg-muted/10">
+            <div key={day.date} className="flex flex-col gap-2 p-3 border rounded-lg bg-background shadow-sm hover:border-primary/30 transition-colors">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <span className="text-sm font-semibold whitespace-nowrap">{day.dateLabel}</span>
+                <span className="text-sm font-bold text-foreground whitespace-nowrap">{day.dateLabel}</span>
                 <Select 
                   value={dayAv.status} 
                   onValueChange={(val: string) => handleStatusChange(day.date, val as AvailabilityStatus)}

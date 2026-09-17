@@ -152,18 +152,18 @@ export function ScheduleConfig({ courts }: { courts: Court[] }) {
 
       {/* Daily Schedule Card */}
       {days.length > 0 && (
-        <Card className="shadow-sm border-green-100">
-          <CardHeader className="pb-3 border-b bg-green-50/30">
-            <CardTitle className="text-lg flex items-center gap-2 text-green-800">
+        <Card className="shadow-sm border-primary/20 overflow-hidden">
+          <CardHeader className="pb-4 border-b bg-gradient-to-r from-primary/10 to-transparent">
+            <CardTitle className="text-lg flex items-center gap-2 text-primary">
               <Clock className="h-5 w-5" />
               Horarios por Día
             </CardTitle>
             <CardDescription>Indica a qué hora empieza la jornada y cuál es el tope horario para arrancar el último partido.</CardDescription>
           </CardHeader>
-          <CardContent className="p-5 grid gap-4">
+          <CardContent className="p-5 grid gap-4 bg-muted/10">
             {days.map((day, idx) => (
-              <div key={day.date} className="flex flex-col sm:flex-row sm:items-center gap-4 p-3 border rounded-md bg-muted/20">
-                <div className="sm:w-32 font-semibold text-sm">
+              <div key={day.date} className="flex flex-col sm:flex-row sm:items-center gap-4 p-4 border rounded-xl bg-background shadow-sm hover:border-primary/30 transition-colors">
+                <div className="sm:w-32 font-bold text-sm text-foreground">
                   {day.dateLabel}
                 </div>
                 <div className="flex-1 grid grid-cols-2 gap-4">
